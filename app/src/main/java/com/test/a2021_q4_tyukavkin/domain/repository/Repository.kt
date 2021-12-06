@@ -4,8 +4,8 @@ import com.test.a2021_q4_tyukavkin.domain.entity.*
 
 interface Repository {
 
-    fun register(auth: Auth): String //TODO Возвращаемое значение token
-    fun login(user: User)
+    suspend fun register(auth: Auth): User
+    fun login(user: User) //TODO Возвращаемое значение token
     fun createLoan(loanRequest: LoanRequest): Loan
     fun getLoanData(id: Long): Loan
     fun getAllLoans(): List<Loan>
