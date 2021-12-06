@@ -10,9 +10,8 @@ class RepositoryImpl @Inject constructor(private val focusStartDatasource: Focus
     override suspend fun register(auth: Auth): User =
         focusStartDatasource.register(auth)
 
-    override fun login(user: User) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun login(auth: Auth) =
+        focusStartDatasource.login(auth)
 
     override fun createLoan(loanRequest: LoanRequest): Loan {
         TODO("Not yet implemented")

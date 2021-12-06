@@ -15,4 +15,9 @@ class FocusStartDatasource @Inject constructor(private val focusStartLoanApi: Fo
             focusStartLoanApi.register(auth).toUser() //TODO Обработка ошибок
         }
 
+    suspend fun login(auth: Auth): String =
+        withContext(Dispatchers.IO) {
+            focusStartLoanApi.login(auth)
+        }
+
 }

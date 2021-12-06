@@ -6,6 +6,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -31,13 +32,20 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun provideScalarsConverterFactory(): ScalarsConverterFactory =
+        ScalarsConverterFactory.create()
+
+    @Provides
+    @Singleton
     fun provideRetrofit(
         moshiConverterFactory: MoshiConverterFactory,
+        scalarsConverterFactory: ScalarsConverterFactory,
         client: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl("http://focusstart.appspot.com/") //TODO Временно
             .client(client)
+            .addConverterFactory(scalarsConverterFactory) //TODO Фабрики конфликтуют
             .addConverterFactory(moshiConverterFactory)
             .build()
 
