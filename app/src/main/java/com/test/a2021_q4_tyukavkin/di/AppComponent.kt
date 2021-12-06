@@ -4,6 +4,8 @@ import android.content.Context
 import com.test.a2021_q4_tyukavkin.MainActivity
 import com.test.a2021_q4_tyukavkin.di.data.network.NetworkModule
 import com.test.a2021_q4_tyukavkin.di.domain.DomainModule
+import com.test.a2021_q4_tyukavkin.di.ui.UIModule
+import com.test.a2021_q4_tyukavkin.ui.RegistrationFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -12,15 +14,16 @@ import javax.inject.Singleton
 @Component(
     modules = [
         NetworkModule::class,
-        DomainModule::class
+        DomainModule::class,
+        UIModule::class
     ]
 )
 interface AppComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): AppComponent
+        fun create(@BindsInstance context: Context): AppComponent //TODO
     }
 
-    fun inject(activity: MainActivity)
+    fun inject(fragment: RegistrationFragment)
 }
