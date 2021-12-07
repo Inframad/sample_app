@@ -3,7 +3,7 @@ package com.test.a2021_q4_tyukavkin.data.model
 import java.math.BigDecimal
 
 data class LoanDTO(
-    val amount: BigDecimal,
+    val amount: Float,//TODO
     val date: String, //TODO Date
     val firstName: String,
     val id: Long,

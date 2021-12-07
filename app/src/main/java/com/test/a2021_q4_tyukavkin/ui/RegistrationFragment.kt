@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.presentation.RegistrationFragmentViewModel
@@ -22,14 +23,14 @@ class RegistrationFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var registrationFragmentViewModel: RegistrationFragmentViewModel
+    private lateinit var viewModel: RegistrationFragmentViewModel
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         (requireActivity().application as App).appComponent.inject(this)
-        registrationFragmentViewModel =
+        viewModel =
             ViewModelProvider(this, viewModelFactory)[RegistrationFragmentViewModel::class.java]
     }
 
@@ -47,7 +48,7 @@ class RegistrationFragment : Fragment() {
         binding.apply {
 
             registerBtn.setOnClickListener {
-                registrationFragmentViewModel.register(
+                viewModel.register(
                     Auth(
                         name = binding.loginEt.text.toString(),
                         password = binding.passwordEt.text.toString()
@@ -56,23 +57,33 @@ class RegistrationFragment : Fragment() {
             }
 
             loginBtn.setOnClickListener {
-                registrationFragmentViewModel.login(
+                viewModel.login(
                     Auth(
                         name = binding.loginEt.text.toString(),
                         password = binding.passwordEt.text.toString()
                     )
                 )
+
             }
         }
 
-        registrationFragmentViewModel.apply {
+        viewModel.apply {
             response.observe(this@RegistrationFragment, {
                 Toast.makeText(requireContext(), "${it.name} \n ${it.role.toString()}", Toast.LENGTH_SHORT).show()
                 Log.i("ServerResponse", "Response observer")
             })
 
-            token.observe(this@RegistrationFragment, {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            status.observe(this@RegistrationFragment, {
+                when (it) {
+                    "Loading" -> binding.progressBar.visibility = View.VISIBLE
+                    "OK" -> {
+                        Log.i("ServerResponse", it)
+                        binding.progressBar.visibility = View.INVISIBLE
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, LoanConditionsFragment())
+                            .commit()
+                    }
+                }
             })
         }
     }

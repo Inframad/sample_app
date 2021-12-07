@@ -1,7 +1,6 @@
 package com.test.a2021_q4_tyukavkin.presentation
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,8 +21,12 @@ class RegistrationFragmentViewModel
     private val _response = MutableLiveData<User>()
     val response: LiveData<User> = _response
 
-    private val _token = MutableLiveData<String>()
-    val token: LiveData<String> = _token
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String> = _status
+
+    init {
+        _status.value = "reg" //TODO Naming
+    }
 
     fun register(auth: Auth) {
         viewModelScope.launch {
@@ -34,7 +37,8 @@ class RegistrationFragmentViewModel
 
     fun login(auth: Auth) {
         viewModelScope.launch {
-            _token.value = loginUsecase(auth)!! //TODO
+            _status.value = "Loading"
+            _status.value = loginUsecase(auth)!! //TODO
         }
     }
 

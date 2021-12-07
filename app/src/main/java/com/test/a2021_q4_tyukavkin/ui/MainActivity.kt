@@ -1,9 +1,9 @@
-package com.test.a2021_q4_tyukavkin
+package com.test.a2021_q4_tyukavkin.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.ActivityMainBinding
-import com.test.a2021_q4_tyukavkin.ui.RegistrationFragment
 
 class MainActivity : AppCompatActivity() {
 

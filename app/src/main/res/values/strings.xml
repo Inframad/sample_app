@@ -5,4 +5,9 @@
     <string name="register">Зарегистрироваться</string>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
+    <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="amount">Сумма</string>
+    <string name="period">Период</string>
+    <string name="phone_number">Номер телефона</string>
 </resources>

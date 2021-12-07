@@ -2,6 +2,7 @@ package com.test.a2021_q4_tyukavkin.di.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
 import com.test.a2021_q4_tyukavkin.presentation.RegistrationFragmentViewModel
 import dagger.Binds
 import dagger.Module
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 interface UIModule {
 
     @Binds
+    @Singleton
     fun bindViewModelFactory(
         factory: ViewModelFactory
     ): ViewModelProvider.Factory
@@ -21,4 +23,10 @@ interface UIModule {
     @Singleton
     @ViewModelKey(RegistrationFragmentViewModel::class)
     fun bindViewModel(viewModel: RegistrationFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @Singleton
+    @ViewModelKey(LoanRegistrationViewModel::class)
+    fun bindLoanRegistrationFragmentViewModel(viewModel: LoanRegistrationViewModel): ViewModel
 }
