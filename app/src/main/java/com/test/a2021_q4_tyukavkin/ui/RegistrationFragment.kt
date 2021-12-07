@@ -80,7 +80,8 @@ class RegistrationFragment : Fragment() {
                         Log.i("ServerResponse", it)
                         binding.progressBar.visibility = View.INVISIBLE
                         parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, LoanConditionsFragment())
+                            //.replace(R.id.fragment_container, LoanConditionsFragment())
+                            .replace(R.id.fragment_container, LoansHistoryFragment())
                             .commit()
                     }
                 }

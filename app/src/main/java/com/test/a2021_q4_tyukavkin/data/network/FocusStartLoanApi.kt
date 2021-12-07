@@ -29,5 +29,6 @@ interface FocusStartLoanApi { //TODO Naming
     @GET("loans/conditions")
     suspend fun getLoanConditions(@Header("Authorization") token: String): LoanConditionsDTO
 
-
+    @GET("loans/all")
+    suspend fun getAllLoans(@Header("Authorization") token: String): List<LoanDTO>
 }

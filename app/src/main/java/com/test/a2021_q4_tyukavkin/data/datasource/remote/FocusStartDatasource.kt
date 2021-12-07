@@ -58,4 +58,9 @@ class FocusStartDatasource //TODO Naming
              )*/
         }
 
+    suspend fun getAllLoans() =
+        withContext(Dispatchers.IO) {
+            focusStartLoanApi.getAllLoans(token).map { it.toLoan() }
+        }
+
 }

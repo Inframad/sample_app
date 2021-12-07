@@ -58,6 +58,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
+    implementation "androidx.cardview:cardview:1.0.0"
+
     implementation 'androidx.fragment:fragment-ktx:1.4.0' //TODO Временно
 
     testImplementation 'junit:junit:4.13.2'

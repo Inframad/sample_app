@@ -30,9 +30,8 @@ class RepositoryImpl
         TODO("Not yet implemented")
     }
 
-    override fun getAllLoans(): List<Loan> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getAllLoans(): List<Loan> =
+        focusStartDatasource.getAllLoans()
 
     override suspend fun getLoanConditions(): LoanConditions =
         focusStartDatasource.getLoanConditions()

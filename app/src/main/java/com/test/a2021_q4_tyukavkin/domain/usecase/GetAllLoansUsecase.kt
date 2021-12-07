@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class GetAllLoansUsecase @Inject constructor(private val repository: Repository) {
 
-    operator fun invoke() =
+    suspend operator fun invoke() =
         repository.getAllLoans()
 }

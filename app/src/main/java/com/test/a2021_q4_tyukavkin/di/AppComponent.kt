@@ -6,6 +6,7 @@ import com.test.a2021_q4_tyukavkin.di.domain.DomainModule
 import com.test.a2021_q4_tyukavkin.di.ui.UIModule
 import com.test.a2021_q4_tyukavkin.ui.LoanConditionsFragment
 import com.test.a2021_q4_tyukavkin.ui.LoanRegistrationFragment
+import com.test.a2021_q4_tyukavkin.ui.LoansHistoryFragment
 import com.test.a2021_q4_tyukavkin.ui.RegistrationFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -29,4 +30,5 @@ interface AppComponent {
     fun inject(fragment: RegistrationFragment)
     fun inject(fragment: LoanConditionsFragment)
     fun inject(fragment: LoanRegistrationFragment)
+    fun inject(fragment: LoansHistoryFragment)
 }
