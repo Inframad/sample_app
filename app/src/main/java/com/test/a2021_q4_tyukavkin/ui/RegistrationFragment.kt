@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
@@ -31,7 +33,10 @@ class RegistrationFragment : Fragment() {
 
         (requireActivity().application as App).appComponent.inject(this)
         viewModel =
-            ViewModelProvider(this, viewModelFactory)[RegistrationFragmentViewModel::class.java]
+            ViewModelProvider(
+                this@RegistrationFragment,
+                viewModelFactory
+            )[RegistrationFragmentViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -57,6 +62,7 @@ class RegistrationFragment : Fragment() {
             }
 
             loginBtn.setOnClickListener {
+                Log.i("MyTAG", "Login pressed")
                 viewModel.login(
                     Auth(
                         name = binding.loginEt.text.toString(),
@@ -69,7 +75,11 @@ class RegistrationFragment : Fragment() {
 
         viewModel.apply {
             response.observe(this@RegistrationFragment, {
-                Toast.makeText(requireContext(), "${it.name} \n ${it.role.toString()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "${it.name} \n ${it.role.toString()}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.i("ServerResponse", "Response observer")
             })
 
@@ -79,10 +89,15 @@ class RegistrationFragment : Fragment() {
                     "OK" -> {
                         Log.i("ServerResponse", it)
                         binding.progressBar.visibility = View.INVISIBLE
-                        parentFragmentManager.beginTransaction()
+                        /*parentFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, LoanConditionsFragment())
                             //.replace(R.id.fragment_container, LoansHistoryFragment())
-                            .commit()
+                            .commit()*/
+                        Log.i("MyTAG", "OK")
+                        findNavController().apply {
+                            popBackStack()
+                            navigate(R.id.loans_history_dest)
+                        }
                     }
                 }
             })

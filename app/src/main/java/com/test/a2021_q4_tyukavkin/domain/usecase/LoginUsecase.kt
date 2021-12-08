@@ -4,6 +4,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.repository.Repository
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class LoginUsecase @Inject constructor(private val repository: Repository) {
 

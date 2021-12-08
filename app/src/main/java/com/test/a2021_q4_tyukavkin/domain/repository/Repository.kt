@@ -4,6 +4,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.*
 
 interface Repository {
 
+    suspend fun checkAuthorization(): Boolean
     suspend fun register(auth: Auth): User
     suspend fun login(auth: Auth): String //TODO Возвращаемое значение token
     suspend fun createLoan(loanRequest: LoanRequest): Loan

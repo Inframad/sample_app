@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.presentation.LoanHistoryFragmentViewModel
 import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
+import com.test.a2021_q4_tyukavkin.presentation.MainActivityViewModel
 import com.test.a2021_q4_tyukavkin.presentation.RegistrationFragmentViewModel
 import dagger.Binds
 import dagger.Module
@@ -36,4 +37,10 @@ interface UIModule {
     @Singleton
     @ViewModelKey(LoanHistoryFragmentViewModel::class)
     fun bindLoanHistoryFragmentViewModel(viewModel: LoanHistoryFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @Singleton
+    @ViewModelKey(MainActivityViewModel::class)
+    fun bindMainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
 }

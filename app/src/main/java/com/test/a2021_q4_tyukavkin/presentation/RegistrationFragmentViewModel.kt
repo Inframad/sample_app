@@ -12,6 +12,7 @@ import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 import javax.security.auth.login.LoginException
 
 class RegistrationFragmentViewModel
@@ -44,7 +45,9 @@ class RegistrationFragmentViewModel
     }
 
     fun login(auth: Auth) {
+        Log.i("MyTAG", "Before launched")
         viewModelScope.launch(loginExceptionHandler) {
+            Log.i("MyTAG", "launched")
             _status.value = "Loading"
             _status.value = loginUsecase(auth)!! //TODO
         }

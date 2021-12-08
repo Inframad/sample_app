@@ -14,14 +14,14 @@ class LocalDatasource
 
     private val sharedPref = context.getSharedPreferences(DATA, Context.MODE_PRIVATE)
 
-    fun saveString(value: String?) {
+    fun saveString(value: String?) { //TODO Асинхронно
         with (sharedPref.edit()) {
             putString("TOKEN", value)
             apply()
         }
     }
 
-    fun getString(key: String): String? =
+    fun getString(key: String): String? = //TODO Асинхронно
         sharedPref.getString(key, null)
 
 }

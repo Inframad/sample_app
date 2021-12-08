@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loans_history_dest">
+    app:startDestination="@id/registration_dest">
 
     <fragment
         android:id="@+id/loans_history_dest"
@@ -29,4 +29,5 @@
         android:name="com.test.a2021_q4_tyukavkin.ui.RegistrationFragment"
         android:label="registration"
         tools:layout="@layout/fragment_registration" />
+
 </navigation>

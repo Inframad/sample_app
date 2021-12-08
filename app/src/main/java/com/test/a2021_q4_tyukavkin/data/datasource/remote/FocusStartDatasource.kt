@@ -45,10 +45,10 @@ class FocusStartDatasource //TODO Naming
 
     suspend fun getLoanConditions() =
         withContext(Dispatchers.IO) {
-            focusStartLoanApi.getLoanConditions(token!!).toLoanConditions()
+            focusStartLoanApi.getLoanConditions(token!!).toLoanConditions() //TODO
         }
 
-    suspend fun createLoan(loanRequest: LoanRequest) =
+    suspend fun createLoan(loanRequest: LoanRequest): Loan =
         withContext(Dispatchers.IO) {
             Log.i("ServerResponse", "Creating loan")
             focusStartLoanApi.createLoan(token!!, loanRequest).toLoan().also {
