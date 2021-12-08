@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoansHistoryBinding
 import com.test.a2021_q4_tyukavkin.presentation.LoanHistoryFragmentViewModel
 import javax.inject.Inject
@@ -50,7 +52,14 @@ class LoansHistoryFragment : Fragment() {
 
             loans.observe(this@LoansHistoryFragment, { loans ->
                 binding.loansRv.apply {
-                    val loanAdapter = LoanAdapter()
+
+                    val bundle = Bundle()
+                    val loanAdapter = LoanAdapter { id ->
+                        bundle.putLong("ID", id)
+                        findNavController().navigate(
+                            R.id.loan_details_dest, bundle
+                        )
+                    }
                     loanAdapter.loans = loans
                     adapter = loanAdapter
                 }

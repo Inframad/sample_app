@@ -2,10 +2,7 @@ package com.test.a2021_q4_tyukavkin.di.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.test.a2021_q4_tyukavkin.presentation.LoanHistoryFragmentViewModel
-import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
-import com.test.a2021_q4_tyukavkin.presentation.MainActivityViewModel
-import com.test.a2021_q4_tyukavkin.presentation.RegistrationFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -22,7 +19,7 @@ interface UIModule {
 
     @Binds
     @IntoMap
-    @Singleton
+    @Singleton //TODO Отдельные аннотации
     @ViewModelKey(RegistrationFragmentViewModel::class)
     fun bindUserRegistrationViewModel(viewModel: RegistrationFragmentViewModel): ViewModel
 
@@ -43,4 +40,9 @@ interface UIModule {
     @Singleton
     @ViewModelKey(MainActivityViewModel::class)
     fun bindMainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoanDetailsFragmentViewModel::class)
+    fun bindLoanDetailsFragmentViewModel(viewModel: LoanDetailsFragmentViewModel): ViewModel
 }

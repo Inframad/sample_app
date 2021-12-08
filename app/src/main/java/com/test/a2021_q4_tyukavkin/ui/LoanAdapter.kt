@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.test.a2021_q4_tyukavkin.databinding.LoanItemBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Loan
 
-class LoanAdapter : RecyclerView.Adapter<LoanViewHolder>() {
+class LoanAdapter(
+    private val onClickItem: (Long) -> Unit
+) : RecyclerView.Adapter<LoanViewHolder>() {
 
     var loans: List<Loan> = emptyList()
         set(value) {
@@ -24,7 +26,7 @@ class LoanAdapter : RecyclerView.Adapter<LoanViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: LoanViewHolder, position: Int) =
-        holder.bind(loans[position])
+        holder.bind(loans[position], onClickItem)
 
     override fun getItemCount(): Int =
         loans.size

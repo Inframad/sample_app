@@ -7,10 +7,7 @@ import com.test.a2021_q4_tyukavkin.data.model.UserDTO
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface FocusStartLoanApi { //TODO Naming
 
@@ -31,4 +28,10 @@ interface FocusStartLoanApi { //TODO Naming
 
     @GET("loans/all")
     suspend fun getAllLoans(@Header("Authorization") token: String): List<LoanDTO>
+
+    @GET("loans/{id}")
+    suspend fun getLoanData(
+        @Header("Authorization") token: String,
+        @Path("id") id: Long
+    ): LoanDTO
 }

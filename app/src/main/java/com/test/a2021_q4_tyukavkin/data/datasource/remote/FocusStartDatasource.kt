@@ -27,7 +27,7 @@ class FocusStartDatasource //TODO Naming
 
     suspend fun register(auth: Auth): User =
         withContext(Dispatchers.IO) { //TODO Провайдить dispatcher
-            focusStartLoanApi.register(auth).toUser() //TODO Обработка ошибок
+            focusStartLoanApi.register(auth).toUser()
         }
 
     suspend fun login(auth: Auth): String =
@@ -54,22 +54,25 @@ class FocusStartDatasource //TODO Naming
             /*focusStartLoanApi.createLoan(token!!, loanRequest).toLoan().also {
                 Log.i("ServerResponse", it.toString())
             }*/
-             Loan(
-                 amount = 1F,
-                 date = "123",
-                 firstName = "Владимир",
-                 id = 123,
-                 lastName = "Путин",
-                 percent = 20.0,
-                 period = 100,
-                 phoneNumber = "123",
-                 state = LoanState.REGISTERED
-             )
+            Loan(
+                amount = 1F,
+                date = "123",
+                firstName = "Владимир",
+                id = 123,
+                lastName = "Путин",
+                percent = 20.0,
+                period = 100,
+                phoneNumber = "123",
+                state = LoanState.REGISTERED
+            )
         }
 
     suspend fun getAllLoans() =
         withContext(Dispatchers.IO) {
             focusStartLoanApi.getAllLoans(token!!).map { it.toLoan() }
         }
+
+    suspend fun getLoanData(id: Long): Loan =
+        focusStartLoanApi.getLoanData(token!!, id).toLoan()
 
 }

@@ -28,9 +28,8 @@ class RepositoryImpl
     override suspend fun createLoan(loanRequest: LoanRequest): Loan =
         focusStartDatasource.createLoan(loanRequest)
 
-    override fun getLoanData(id: Long): Loan {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getLoanData(id: Long): Loan =
+        focusStartDatasource.getLoanData(id)
 
     override suspend fun getAllLoans(): List<Loan> =
         focusStartDatasource.getAllLoans()

@@ -8,7 +8,7 @@ interface Repository {
     suspend fun register(auth: Auth): User
     suspend fun login(auth: Auth): String //TODO Возвращаемое значение token
     suspend fun createLoan(loanRequest: LoanRequest): Loan
-    fun getLoanData(id: Long): Loan
+    suspend fun getLoanData(id: Long): Loan
     suspend fun getAllLoans(): List<Loan>
     suspend fun getLoanConditions(): LoanConditions
 }

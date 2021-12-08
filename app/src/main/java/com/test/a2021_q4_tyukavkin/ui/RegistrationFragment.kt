@@ -74,7 +74,7 @@ class RegistrationFragment : Fragment() {
         }
 
         viewModel.apply {
-            response.observe(this@RegistrationFragment, {
+            user.observe(this@RegistrationFragment, {
                 Toast.makeText(
                     requireContext(),
                     "${it.name} \n ${it.role.toString()}",

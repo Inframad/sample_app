@@ -8,9 +8,11 @@ class LoanViewHolder(
     private val binding: LoanItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(loan: Loan) {
+    fun bind(loan: Loan, onClickItem: (Long) -> Unit) {
         binding.tempTv.text =
             "${loan.firstName} ${loan.lastName} \n" +
                     "${loan.percent} ${loan.state}"
+
+        binding.root.setOnClickListener { onClickItem(loan.id) }
     }
 }
