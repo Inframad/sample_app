@@ -13,7 +13,7 @@ class RepositoryImpl
 @Inject constructor(
     private val focusStartDatasource: FocusStartDatasource,
     private val localDatasource: LocalDatasource
-    ) :
+) :
     Repository {
 
     override suspend fun checkAuthorization(): Boolean =
@@ -22,15 +22,11 @@ class RepositoryImpl
     override suspend fun register(auth: Auth): User =
         focusStartDatasource.register(auth)
 
-    override suspend fun login(auth: Auth):String =
+    override suspend fun login(auth: Auth): String =
         focusStartDatasource.login(auth)
 
-
-    override suspend fun createLoan(loanRequest: LoanRequest): Loan {
-        Log.i("MyTAG", "Repository create loan")
-        return focusStartDatasource.createLoan(loanRequest)
-    }
-
+    override suspend fun createLoan(loanRequest: LoanRequest): Loan =
+        focusStartDatasource.createLoan(loanRequest)
 
     override fun getLoanData(id: Long): Loan {
         TODO("Not yet implemented")

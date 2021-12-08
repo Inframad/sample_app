@@ -14,12 +14,12 @@ class MainActivityViewModel
     private val checkAuthorizationUsecase: CheckAuthorizationUsecase
 ) : ViewModel() {
 
-    private val _isAuthorized = MutableLiveData<Boolean>()
+    private val _isAuthorized: MutableLiveData<Boolean> = MutableLiveData()
     val isAuthorized: LiveData<Boolean> = _isAuthorized
 
     init {
         viewModelScope.launch {
-            _isAuthorized.value = checkAuthorizationUsecase()!! //TODO
+            _isAuthorized.value = checkAuthorizationUsecase()
             Log.i("MyTAG", "Auth ${isAuthorized.value}")
         }
     }

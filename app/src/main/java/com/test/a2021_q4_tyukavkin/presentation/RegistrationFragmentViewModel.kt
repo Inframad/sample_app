@@ -12,8 +12,6 @@ import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
-import javax.security.auth.login.LoginException
 
 class RegistrationFragmentViewModel
 @Inject constructor(
@@ -21,10 +19,10 @@ class RegistrationFragmentViewModel
     private val loginUsecase: LoginUsecase
 ) : ViewModel() {
 
-    private val _response = MutableLiveData<User>()
-    val response: LiveData<User> = _response
+    private val _user: MutableLiveData<User> = MutableLiveData()
+    val user: LiveData<User> = _user
 
-    private val _status = MutableLiveData<String>()
+    private val _status: MutableLiveData<String> = MutableLiveData()
     val status: LiveData<String> = _status
 
     init {
@@ -39,8 +37,7 @@ class RegistrationFragmentViewModel
 
     fun register(auth: Auth) {
         viewModelScope.launch {
-            _response.value = registrationUsecase(auth)!! //TODO
-            Log.i("ServerResponse", _response.value?.name.toString())
+            _user.value = registrationUsecase(auth)
         }
     }
 
@@ -49,7 +46,7 @@ class RegistrationFragmentViewModel
         viewModelScope.launch(loginExceptionHandler) {
             Log.i("MyTAG", "launched")
             _status.value = "Loading"
-            _status.value = loginUsecase(auth)!! //TODO
+            _status.value = loginUsecase(auth)
         }
     }
 
