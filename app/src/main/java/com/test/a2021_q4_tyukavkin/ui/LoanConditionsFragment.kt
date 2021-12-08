@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanConditionsBinding
@@ -53,9 +54,10 @@ class LoanConditionsFragment @Inject constructor(
         })
 
         binding.registerLoanBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction()
+            /*parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LoanRegistrationFragment())
-                .commit()
+                .commit()*/
+            findNavController().navigate(R.id.loan_registration_dest, null)
         }
     }
 

@@ -9,8 +9,10 @@ import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.security.auth.login.LoginException
 
 class RegistrationFragmentViewModel
 @Inject constructor(
@@ -28,6 +30,12 @@ class RegistrationFragmentViewModel
         _status.value = "reg" //TODO Naming
     }
 
+    private val loginExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        when (throwable) {
+            is retrofit2.HttpException -> Log.e("Error http", throwable.code().toString())
+        }
+    }
+
     fun register(auth: Auth) {
         viewModelScope.launch {
             _response.value = registrationUsecase(auth)!! //TODO
@@ -36,7 +44,7 @@ class RegistrationFragmentViewModel
     }
 
     fun login(auth: Auth) {
-        viewModelScope.launch {
+        viewModelScope.launch(loginExceptionHandler) {
             _status.value = "Loading"
             _status.value = loginUsecase(auth)!! //TODO
         }

@@ -17,8 +17,9 @@ class RepositoryImpl
     override suspend fun register(auth: Auth): User =
         focusStartDatasource.register(auth)
 
-    override suspend fun login(auth: Auth) =
+    override suspend fun login(auth: Auth):String =
         focusStartDatasource.login(auth)
+
 
     override suspend fun createLoan(loanRequest: LoanRequest): Loan {
         Log.i("MyTAG", "Repository create loan")

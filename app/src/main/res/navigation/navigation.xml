@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/loans_history_dest">
+
+    <fragment
+        android:id="@+id/loans_history_dest"
+        android:name="com.test.a2021_q4_tyukavkin.ui.LoansHistoryFragment"
+        android:label="loans_history"
+        tools:layout="@layout/fragment_loans_history" />
+    <fragment
+        android:id="@+id/loan_conditions_dest"
+        android:name="com.test.a2021_q4_tyukavkin.ui.LoanConditionsFragment"
+        android:label="loan_conditions"
+        tools:layout="@layout/fragment_loan_conditions" >
+        <action
+            android:id="@+id/action_loan_conditions_dest_to_loan_registration_dest"
+            app:destination="@id/loan_registration_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/loan_registration_dest"
+        android:name="com.test.a2021_q4_tyukavkin.ui.LoanRegistrationFragment"
+        android:label="loan_registration"
+        tools:layout="@layout/fragment_loan_registration" />
+    <fragment
+        android:id="@+id/registration_dest"
+        android:name="com.test.a2021_q4_tyukavkin.ui.RegistrationFragment"
+        android:label="registration"
+        tools:layout="@layout/fragment_registration" />
+</navigation>
