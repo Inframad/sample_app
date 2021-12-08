@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
@@ -58,7 +60,17 @@ class LoanRegistrationFragment : Fragment() {
                     )
                 )
             }
+
         }
+
+        viewModel.loan.observe(this, { loan ->
+            loan?.let {
+                findNavController().apply {
+                    popBackStack(R.id.loans_history_dest, false)
+                    navigate(R.id.loan_successfully_created_dest)
+                }
+            }
+        })
     }
 
 }

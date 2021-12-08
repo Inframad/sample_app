@@ -23,11 +23,25 @@
         android:id="@+id/loan_registration_dest"
         android:name="com.test.a2021_q4_tyukavkin.ui.LoanRegistrationFragment"
         android:label="loan_registration"
-        tools:layout="@layout/fragment_loan_registration" />
+        tools:layout="@layout/fragment_loan_registration" >
+        <action
+            android:id="@+id/action_loan_registration_dest_to_loan_successfully_created_dest"
+            app:destination="@id/loan_successfully_created_dest"
+            app:popUpTo="@id/loans_history_dest"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/registration_dest"
         android:name="com.test.a2021_q4_tyukavkin.ui.RegistrationFragment"
         android:label="registration"
-        tools:layout="@layout/fragment_registration" />
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/action_registration_dest_to_loan_conditions_dest"
+            app:destination="@id/loan_conditions_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/loan_successfully_created_dest"
+        android:name="com.test.a2021_q4_tyukavkin.ui.LoanSuccessfullyCreatedFragment"
+        android:label="LoanSuccessfullyCreatedFragment" />
 
 </navigation>

@@ -25,7 +25,7 @@ class LoanHistoryFragmentViewModel
         _state.value = "Loading"
 
         viewModelScope.launch {
-            val deferredLoans = async { getLoanListUsecase()!! }  //TODO Null safety
+            val deferredLoans = async { getLoanListUsecase() }
             _loans.value = deferredLoans.await()
             _state.value = "Loaded"
         }

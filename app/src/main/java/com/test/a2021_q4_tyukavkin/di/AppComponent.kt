@@ -26,6 +26,7 @@ interface AppComponent {
 
     fun inject(activity: MainActivity)
     fun inject(fragment: RegistrationFragment)
+    fun inject(fragment: LoanSuccessfullyCreatedFragment)
     fun inject(fragment: LoanConditionsFragment)
     fun inject(fragment: LoanRegistrationFragment)
     fun inject(fragment: LoansHistoryFragment)

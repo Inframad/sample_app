@@ -24,7 +24,7 @@ interface UIModule {
     @IntoMap
     @Singleton
     @ViewModelKey(RegistrationFragmentViewModel::class)
-    fun bindViewModel(viewModel: RegistrationFragmentViewModel): ViewModel
+    fun bindUserRegistrationViewModel(viewModel: RegistrationFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap
