@@ -18,16 +18,16 @@ class LoanHistoryFragmentViewModel
     private val _loans = MutableLiveData<List<Loan>>()
     val loans: LiveData<List<Loan>> = _loans
 
-    private val _state = MutableLiveData<String>()
-    val state: LiveData<String> = _state
+    private val _state = MutableLiveData<LoanHistoryState>()
+    val state: LiveData<LoanHistoryState> = _state
 
     init {
-        _state.value = "Loading"
+        _state.value = LoanHistoryState.LOADING
 
         viewModelScope.launch {
             val deferredLoans = async { getLoanListUsecase() }
             _loans.value = deferredLoans.await()
-            _state.value = "Loaded"
+            _state.value = LoanHistoryState.LOADED
         }
     }
 }

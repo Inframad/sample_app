@@ -41,8 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.isAuthorized.observe(this, {
             if (it) {
-                graph.startDestination = R.id.loans_history_dest
-                navController.graph = graph
+                if (savedInstanceState == null) {
+                    graph.startDestination = R.id.loans_history_dest
+                    navController.graph = graph
+                }
             }
         })
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanDetailsBinding
 import com.test.a2021_q4_tyukavkin.presentation.LoanDetailsFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.LoanDetailsState
 import javax.inject.Inject
 
 class LoanDetailsFragment : Fragment() {
@@ -42,8 +43,22 @@ class LoanDetailsFragment : Fragment() {
 
         arguments?.let { viewModel.getLoanData(it.getLong("ID")) }
 
-        viewModel.loan.observe(this, {
-            binding.loanDetailsTv.text = it.toString()
-        })
+        viewModel.apply {
+
+            loan.observe(this@LoanDetailsFragment, {
+                binding.loanDetailsTv.text = it.toString()
+            })
+
+            state.observe(this@LoanDetailsFragment, { state ->
+                updateUI(state)
+            })
+        }
+    }
+
+    private fun updateUI(state: LoanDetailsState) {
+        binding.apply {
+            loanDetailsTv.visibility = state.tvVisibility
+            progressBar.visibility = state.progressVisibility
+        }
     }
 }
