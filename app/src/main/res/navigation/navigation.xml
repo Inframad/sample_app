@@ -11,8 +11,12 @@
         android:label="loans_history"
         tools:layout="@layout/fragment_loans_history" >
         <action
-            android:id="@+id/action_loans_history_dest_to_loanDetailsFragment"
-            app:destination="@id/loan_details_dest" />
+            android:id="@+id/next_action"
+            app:destination="@id/loan_details_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/loan_conditions_dest"
@@ -20,8 +24,12 @@
         android:label="loan_conditions"
         tools:layout="@layout/fragment_loan_conditions" >
         <action
-            android:id="@+id/action_loan_conditions_dest_to_loan_registration_dest"
-            app:destination="@id/loan_registration_dest" />
+            android:id="@+id/next_action"
+            app:destination="@id/loan_registration_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/loan_registration_dest"
@@ -29,7 +37,7 @@
         android:label="loan_registration"
         tools:layout="@layout/fragment_loan_registration" >
         <action
-            android:id="@+id/action_loan_registration_dest_to_loan_successfully_created_dest"
+            android:id="@+id/next_action"
             app:destination="@id/loan_successfully_created_dest"
             app:popUpTo="@id/loans_history_dest"
             app:popUpToInclusive="false" />
@@ -40,7 +48,7 @@
         android:label="registration"
         tools:layout="@layout/fragment_registration" >
         <action
-            android:id="@+id/action_registration_dest_to_loan_conditions_dest"
+            android:id="@+id/next_action"
             app:destination="@id/loan_conditions_dest" />
     </fragment>
     <fragment

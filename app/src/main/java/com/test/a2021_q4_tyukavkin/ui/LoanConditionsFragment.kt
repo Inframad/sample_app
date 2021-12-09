@@ -54,10 +54,7 @@ class LoanConditionsFragment @Inject constructor(
         })
 
         binding.registerLoanBtn.setOnClickListener {
-            /*parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LoanRegistrationFragment())
-                .commit()*/
-            findNavController().navigate(R.id.loan_registration_dest, null)
+            findNavController().navigate(R.id.next_action)
         }
     }
 

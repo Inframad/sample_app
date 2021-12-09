@@ -67,7 +67,7 @@ class LoanRegistrationFragment : Fragment() {
             loan?.let {
                 findNavController().apply {
                     popBackStack(R.id.loans_history_dest, false)
-                    navigate(R.id.loan_successfully_created_dest)
+                    navigate(R.id.next_action)
                 }
             }
         })

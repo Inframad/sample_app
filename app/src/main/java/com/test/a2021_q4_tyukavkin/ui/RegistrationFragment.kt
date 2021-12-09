@@ -96,7 +96,7 @@ class RegistrationFragment : Fragment() {
                         Log.i("MyTAG", "OK")
                         findNavController().apply {
                             popBackStack()
-                            navigate(R.id.loans_history_dest)
+                            navigate(R.id.next_action)
                         }
                     }
                 }

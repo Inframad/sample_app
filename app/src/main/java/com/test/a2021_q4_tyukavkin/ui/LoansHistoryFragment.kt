@@ -57,7 +57,7 @@ class LoansHistoryFragment : Fragment() {
                     val loanAdapter = LoanAdapter { id ->
                         bundle.putLong("ID", id)
                         findNavController().navigate(
-                            R.id.loan_details_dest, bundle
+                            R.id.next_action, bundle
                         )
                     }
                     loanAdapter.loans = loans
