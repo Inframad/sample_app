@@ -6,7 +6,7 @@ interface Repository {
 
     suspend fun checkAuthorization(): Boolean
     suspend fun register(auth: Auth): User
-    suspend fun login(auth: Auth): String //TODO Возвращаемое значение token
+    suspend fun login(auth: Auth): String
     suspend fun createLoan(loanRequest: LoanRequest): Loan
     suspend fun getLoanData(id: Long): Loan
     suspend fun getAllLoans(): List<Loan>

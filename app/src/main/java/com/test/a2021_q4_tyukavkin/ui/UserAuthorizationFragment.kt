@@ -1,6 +1,11 @@
 package com.test.a2021_q4_tyukavkin.ui
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,23 +14,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
-import com.test.a2021_q4_tyukavkin.presentation.RegistrationFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.UserAuthorizationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.UserAuthorizationFragmentViewModel
 import javax.inject.Inject
 
-class RegistrationFragment : Fragment() {
+class UserAuthorizationFragment : Fragment() {
 
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: RegistrationFragmentViewModel
+    private lateinit var viewModel: UserAuthorizationFragmentViewModel
 
 
     override fun onAttach(context: Context) {
@@ -34,9 +39,9 @@ class RegistrationFragment : Fragment() {
         (requireActivity().application as App).appComponent.inject(this)
         viewModel =
             ViewModelProvider(
-                this@RegistrationFragment,
+                this@UserAuthorizationFragment,
                 viewModelFactory
-            )[RegistrationFragmentViewModel::class.java]
+            )[UserAuthorizationFragmentViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -49,6 +54,8 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setNetworkConnectionListener()
 
         binding.apply {
 
@@ -74,33 +81,59 @@ class RegistrationFragment : Fragment() {
         }
 
         viewModel.apply {
-            user.observe(this@RegistrationFragment, {
+            user.observe(this@UserAuthorizationFragment, { user ->
                 Toast.makeText(
                     requireContext(),
-                    "${it.name} \n ${it.role.toString()}",
+                    "Вы успешно зарегистрированы, ${user.name}}",
                     Toast.LENGTH_SHORT
                 ).show()
-                Log.i("ServerResponse", "Response observer")
             })
 
-            status.observe(this@RegistrationFragment, {
-                when (it) {
-                    "Loading" -> binding.progressBar.visibility = View.VISIBLE
-                    "OK" -> {
-                        Log.i("ServerResponse", it)
-                        binding.progressBar.visibility = View.INVISIBLE
-                        /*parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, LoanConditionsFragment())
-                            //.replace(R.id.fragment_container, LoansHistoryFragment())
-                            .commit()*/
-                        Log.i("MyTAG", "OK")
-                        findNavController().apply {
-                            popBackStack()
+            state.observe(this@UserAuthorizationFragment, { state ->
+                updateUI(state)
+                when (state) {
+                    UserAuthorizationFragmentState.LOADED -> {
+                        Log.i("State", "LOADED")
+                        this@UserAuthorizationFragment.findNavController().apply {
                             navigate(R.id.next_action)
                         }
                     }
+
                 }
             })
         }
     }
+
+    private fun updateUI(state: UserAuthorizationFragmentState) {
+        binding.apply {
+            loginBtn.isEnabled = state.buttonsIsEnabled
+            registerBtn.isEnabled = state.buttonsIsEnabled
+            progressBar.visibility = state.progressVisibility
+            warningMessageTv.text = state.warningMsg
+        }
+    }
+
+    private fun setNetworkConnectionListener() {
+        val networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                viewModel.setNetworkState(isAvailable = true)
+            }
+
+            override fun onLost(network: Network) {
+                viewModel.setNetworkState(isAvailable = false)
+            }
+        }
+
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        } else {
+            val request = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
+            connectivityManager.registerNetworkCallback(request, networkCallback)
+        }
+    }
+
 }

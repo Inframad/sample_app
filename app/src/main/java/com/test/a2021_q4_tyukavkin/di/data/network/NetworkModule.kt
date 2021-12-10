@@ -45,7 +45,7 @@ class NetworkModule {
         Retrofit.Builder()
             .baseUrl("http://focusstart.appspot.com/") //TODO Временно
             .client(client)
-            .addConverterFactory(scalarsConverterFactory) //TODO Фабрики конфликтуют
+            .addConverterFactory(scalarsConverterFactory)
             .addConverterFactory(moshiConverterFactory)
             .build()
 

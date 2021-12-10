@@ -20,8 +20,8 @@ interface UIModule {
     @Binds
     @IntoMap
     @Singleton //TODO Отдельные аннотации
-    @ViewModelKey(RegistrationFragmentViewModel::class)
-    fun bindUserRegistrationViewModel(viewModel: RegistrationFragmentViewModel): ViewModel
+    @ViewModelKey(UserAuthorizationFragmentViewModel::class)
+    fun bindUserRegistrationViewModel(viewModel: UserAuthorizationFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap
