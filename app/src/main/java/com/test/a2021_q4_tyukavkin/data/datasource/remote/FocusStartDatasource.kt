@@ -51,10 +51,10 @@ class FocusStartDatasource //TODO Naming
     suspend fun createLoan(loanRequest: LoanRequest): Loan =
         withContext(Dispatchers.IO) {
             Log.i("ServerResponse", "Creating loan")
-            /*focusStartLoanApi.createLoan(token!!, loanRequest).toLoan().also {
+            focusStartLoanApi.createLoan(token!!, loanRequest).toLoan().also {
                 Log.i("ServerResponse", it.toString())
-            }*/
-            Loan(
+            }
+            /*Loan(
                 amount = 1F,
                 date = "123",
                 firstName = "Владимир",
@@ -64,7 +64,7 @@ class FocusStartDatasource //TODO Naming
                 period = 100,
                 phoneNumber = "123",
                 state = LoanState.REGISTERED
-            )
+            )*/
         }
 
     suspend fun getAllLoans() =

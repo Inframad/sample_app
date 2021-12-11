@@ -1,10 +1,10 @@
 package com.test.a2021_q4_tyukavkin.domain.entity
 
-import java.math.BigDecimal
+import java.time.OffsetDateTime
 
 data class Loan(
     val amount: Float, //TODO
-    val date: String, //TODO Date
+    val offsetDateTime: OffsetDateTime,
     val firstName: String,
     val id: Long,
     val lastName: String,

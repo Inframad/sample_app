@@ -2,7 +2,7 @@ package com.test.a2021_q4_tyukavkin.di.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.test.a2021_q4_tyukavkin.presentation.*
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

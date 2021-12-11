@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.LoanRegistrationFragment">
 
@@ -25,25 +26,6 @@
         android:hint="@string/last_name" />
 
     <EditText
-        android:id="@+id/amount_et"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:hint="@string/amount" />
-
-    <EditText
-        android:id="@+id/period_et"
-        android:inputType="number"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:hint="@string/period" />
-
-    <EditText
         android:id="@+id/phone_number_et"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -53,14 +35,24 @@
         android:hint="@string/phone_number"
         android:inputType="phone" />
 
+    <EditText
+        android:id="@+id/amount_et"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:hint="@string/amount"
+        android:inputType="numberDecimal" />
+
     <TextView
         android:id="@+id/percent_tv"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:text="%"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="%" />
 
     <Button
         android:id="@+id/loan_registration_btn"
@@ -68,6 +60,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:text="Оформить"/>
+        android:text="Оформить" />
 
 </LinearLayout>

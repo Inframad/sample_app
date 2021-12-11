@@ -1,4 +1,4 @@
-package com.test.a2021_q4_tyukavkin.presentation
+package com.test.a2021_q4_tyukavkin.presentation.state
 
 import android.view.View
 

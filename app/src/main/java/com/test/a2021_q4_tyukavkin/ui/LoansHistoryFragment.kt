@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoansHistoryBinding
-import com.test.a2021_q4_tyukavkin.presentation.LoanHistoryFragmentViewModel
-import com.test.a2021_q4_tyukavkin.presentation.LoanHistoryState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanHistoryFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.state.LoanHistoryState
 import javax.inject.Inject
 
 class LoansHistoryFragment : Fragment() {
@@ -44,14 +44,17 @@ class LoansHistoryFragment : Fragment() {
 
         viewModel.apply {
 
-            state.observe(this@LoansHistoryFragment, { state ->
+            getLoans()
+
+            state.observe(viewLifecycleOwner, { state ->
                 updateUI(state)
             })
 
-            loans.observe(this@LoansHistoryFragment, { loans ->
+            loans.observe(viewLifecycleOwner, { loans ->
                 binding.loansRv.apply {
-                    val bundle = Bundle()
+
                     val loanAdapter = LoanAdapter { id ->
+                        val bundle = Bundle()
                         bundle.putLong("ID", id)
                         findNavController().navigate(
                             R.id.next_action, bundle

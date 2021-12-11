@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanDetailsBinding
-import com.test.a2021_q4_tyukavkin.presentation.LoanDetailsFragmentViewModel
-import com.test.a2021_q4_tyukavkin.presentation.LoanDetailsState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanDetailsFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.state.LoanDetailsState
+import com.test.a2021_q4_tyukavkin.presentation.formatOffsetDateTimeToString
 import javax.inject.Inject
 
 class LoanDetailsFragment : Fragment() {
@@ -45,11 +47,23 @@ class LoanDetailsFragment : Fragment() {
 
         viewModel.apply {
 
-            loan.observe(this@LoanDetailsFragment, {
-                binding.loanDetailsTv.text = it.toString()
+            loan.observe(viewLifecycleOwner, { loan ->
+                binding.apply { //TODO Смена ориентации
+                    loanRequestNumber.append(loan.id.toString())
+                    loanRequestStatus.append(loan.state.toString())
+                    borrowerFirstName.append(loan.firstName)
+                    borrowerLastName.append(loan.lastName)
+                    borrowerPhoneNumber.append(loan.phoneNumber)
+                    loanAmount.append(loan.amount.toString())
+                    loanPercent.text = loan.percent.toString()
+                    loanPercent.append("%")
+                    loanPeriod.append(loan.period.toString())
+                    loanRequestDate.append("${loan.date} ${loan.time}")
+                    //TODO Отображение даты
+                }
             })
 
-            state.observe(this@LoanDetailsFragment, { state ->
+            state.observe(viewLifecycleOwner, { state ->
                 updateUI(state)
             })
         }
@@ -57,7 +71,7 @@ class LoanDetailsFragment : Fragment() {
 
     private fun updateUI(state: LoanDetailsState) {
         binding.apply {
-            loanDetailsTv.visibility = state.tvVisibility
+            loanCardDetail.visibility = state.loanCardDetailVisibility
             progressBar.visibility = state.progressVisibility
         }
     }

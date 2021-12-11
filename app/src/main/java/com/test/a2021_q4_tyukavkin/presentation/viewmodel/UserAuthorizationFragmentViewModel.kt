@@ -1,4 +1,4 @@
-package com.test.a2021_q4_tyukavkin.presentation
+package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,6 +9,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
+import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

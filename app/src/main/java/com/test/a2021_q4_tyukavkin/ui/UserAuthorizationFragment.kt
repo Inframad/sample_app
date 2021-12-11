@@ -19,8 +19,8 @@ import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
-import com.test.a2021_q4_tyukavkin.presentation.UserAuthorizationFragmentState
-import com.test.a2021_q4_tyukavkin.presentation.UserAuthorizationFragmentViewModel
+import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.UserAuthorizationFragmentViewModel
 import javax.inject.Inject
 
 class UserAuthorizationFragment : Fragment() {

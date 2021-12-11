@@ -1,6 +1,5 @@
 package com.test.a2021_q4_tyukavkin.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanConditionsBinding
-import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
+import com.test.a2021_q4_tyukavkin.presentation.state.LoanConditionsFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
-class LoanConditionsFragment @Inject constructor(
-) : Fragment() {
+class LoanConditionsFragment: Fragment() {
 
     private var _binding: FragmentLoanConditionsBinding? = null
     private val binding get() = _binding!!
@@ -40,21 +39,35 @@ class LoanConditionsFragment @Inject constructor(
             ViewModelProvider(requireActivity(), viewModelFactory)[LoanRegistrationViewModel::class.java]
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getLoanConditions()
+        viewModel.apply {
 
-        viewModel.loanConditions.observe(this, {
-            binding.loanConditionsTv.text =
-                "Максимальная сумма: ${it.maxAmount} \n" +
-                        "Процентная ставка: ${it.percent} \n" +
-                        "Период: ${it.period}"
-        })
+            loanConditions.observe(viewLifecycleOwner, { loanConditions ->
+
+                binding.apply {
+                    loanRequestMaxAmount.text = loanConditions.maxAmount.toString()
+                    loanRequestPercent.append(" ${loanConditions.percent}")
+                    loanRequestPeriod.append(" ${loanConditions.period}")
+                }
+
+            })
+
+            conditionsState.observe(viewLifecycleOwner, { state ->
+                updateUI(state)
+            })
+        }
 
         binding.registerLoanBtn.setOnClickListener {
             findNavController().navigate(R.id.next_action)
+        }
+    }
+
+    private fun updateUI(state: LoanConditionsFragmentState) {
+        binding.apply {
+            loanConditionsCard.visibility = state.loanConditionsCardVisibility
+            progressBar.visibility = state.progressBarVisibility
         }
     }
 

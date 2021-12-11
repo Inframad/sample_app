@@ -5,13 +5,14 @@
       <map>
         <entry key="..\:/Program/Projects/2021_q4_tyukavkin/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_conditions.xml" value="0.16" />
-        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_details.xml" value="0.16111111111111112" />
-        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_registration.xml" value="0.12092391304347826" />
-        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loans_history.xml" value="0.11458333333333333" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_conditions.xml" value="0.25" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_details.xml" value="0.33" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_registration.xml" value="0.18" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loan_successfully_created.xml" value="0.1814814814814815" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_loans_history.xml" value="0.2" />
         <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_registration.xml" value="0.22" />
         <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/fragment_start.xml" value="0.19166666666666668" />
-        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/loan_item.xml" value="0.21" />
+        <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/layout/loan_item.xml" value="0.25" />
         <entry key="..\:/Repos/2021_q4_tyukavkin/app/src/main/res/menu/main_menu.xml" value="0.196875" />
       </map>
     </option>

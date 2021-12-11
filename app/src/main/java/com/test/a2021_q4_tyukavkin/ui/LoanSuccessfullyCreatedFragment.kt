@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanSuccessfullyCreatedBinding
-import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
+import com.test.a2021_q4_tyukavkin.presentation.state.LoanDetailsState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
+import com.test.a2021_q4_tyukavkin.presentation.formatOffsetDateTimeToString
 import javax.inject.Inject
 
-class LoanSuccessfullyCreatedFragment: Fragment() {
+class LoanSuccessfullyCreatedFragment : Fragment() {
 
     private var _binding: FragmentLoanSuccessfullyCreatedBinding? = null
     private val binding get() = _binding!!
@@ -25,7 +28,10 @@ class LoanSuccessfullyCreatedFragment: Fragment() {
         super.onAttach(context)
         (requireActivity().application as App).appComponent.inject(this)
         viewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[LoanRegistrationViewModel::class.java]
+            ViewModelProvider(
+                requireActivity(),
+                viewModelFactory
+            )[LoanRegistrationViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -40,8 +46,33 @@ class LoanSuccessfullyCreatedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loan.observe(this, {
-            binding.loanDetailsTv.text = it.toString()
-        })
+        viewModel.apply {
+
+            loan.observe(viewLifecycleOwner, { loan ->
+                binding.apply { //TODO Смена ориентации
+                    loanRequestNumber.append(loan.id.toString())
+                    loanRequestStatus.append(loan.state.toString())
+                    borrowerFirstName.append(loan.firstName)
+                    borrowerLastName.append(loan.lastName)
+                    borrowerPhoneNumber.append(loan.phoneNumber)
+                    loanAmount.append(loan.amount.toString())
+                    loanPercent.text = loan.percent.toString()
+                    loanPercent.append("%")
+                    loanPeriod.append(loan.period.toString())
+                    loanRequestDate.append(" ${loan.date} ${loan.time}")
+                }
+            })
+
+            detailState.observe(viewLifecycleOwner, { state ->
+                updateUI(state)
+            })
+        }
+    }
+
+    private fun updateUI(state: LoanDetailsState) {
+        binding.apply {
+            loanCardDetail.visibility = state.loanCardDetailVisibility
+            progressBar.visibility = state.progressVisibility
+        }
     }
 }

@@ -2,9 +2,9 @@ package com.test.a2021_q4_tyukavkin.data.converter
 
 import com.test.a2021_q4_tyukavkin.data.model.LoanConditionsDTO
 import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
-import com.test.a2021_q4_tyukavkin.data.model.LoanRequestDTO
 import com.test.a2021_q4_tyukavkin.data.model.UserDTO
 import com.test.a2021_q4_tyukavkin.domain.entity.*
+import java.time.OffsetDateTime
 
 fun UserDTO.toUser() =
     User(
@@ -23,10 +23,10 @@ fun LoanConditionsDTO.toLoanConditions() =
         period = period
     )
 
-fun LoanDTO.toLoan() =
-    Loan(
+fun LoanDTO.toLoan(): Loan {
+    return Loan(
         amount = amount,
-        date = date,
+        offsetDateTime = OffsetDateTime.parse(date),
         firstName = firstName,
         id = id,
         lastName = lastName,
@@ -40,13 +40,4 @@ fun LoanDTO.toLoan() =
             else -> throw IllegalArgumentException("Loan's state can't be $state")
         }
     )
-
-fun LoanRequestDTO.toLoanRequest() =
-    LoanRequest(
-        amount = amount,
-        firstName = firstName,
-        lastName = lastName,
-        percent = percent,
-        period = period,
-        phoneNumber = phoneNumber
-    )
+}

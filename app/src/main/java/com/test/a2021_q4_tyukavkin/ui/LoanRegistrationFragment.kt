@@ -13,7 +13,7 @@ import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
-import com.test.a2021_q4_tyukavkin.presentation.LoanRegistrationViewModel
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
 class LoanRegistrationFragment : Fragment() {
@@ -51,7 +51,7 @@ class LoanRegistrationFragment : Fragment() {
                 Log.i("MyTAG", "Clicked register")
                 viewModel.registerLoan(
                     LoanRequest(
-                        amount = binding.amountEt.text.toString().toLong(),
+                        amount = binding.amountEt.text.toString().toLong(), //TODO Ограничить max value
                         firstName = binding.firstNameEt.text.toString(),
                         lastName = binding.lastNameEt.text.toString(),
                         percent = viewModel.loanConditions.value!!.percent, //TODO Null safety
@@ -63,10 +63,9 @@ class LoanRegistrationFragment : Fragment() {
 
         }
 
-        viewModel.loan.observe(this, { loan ->
+        viewModel.loan.observe(viewLifecycleOwner, { loan ->
             loan?.let {
                 findNavController().apply {
-                    popBackStack(R.id.loans_history_dest, false)
                     navigate(R.id.next_action)
                 }
             }

@@ -10,7 +10,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.ActivityMainBinding
-import com.test.a2021_q4_tyukavkin.presentation.MainActivityViewModel
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.MainActivityViewModel
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
