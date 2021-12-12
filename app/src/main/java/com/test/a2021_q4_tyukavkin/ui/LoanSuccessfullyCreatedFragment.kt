@@ -8,11 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.test.a2021_q4_tyukavkin.App
-import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanSuccessfullyCreatedBinding
-import com.test.a2021_q4_tyukavkin.presentation.state.LoanDetailsState
+import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
-import com.test.a2021_q4_tyukavkin.presentation.formatOffsetDateTimeToString
 import javax.inject.Inject
 
 class LoanSuccessfullyCreatedFragment : Fragment() {
@@ -51,7 +49,7 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
             loan.observe(viewLifecycleOwner, { loan ->
                 binding.apply { //TODO Смена ориентации
                     loanRequestNumber.append(loan.id.toString())
-                    loanRequestStatus.append(loan.state.toString())
+                    loanRequestStatus.append(loan.state)
                     borrowerFirstName.append(loan.firstName)
                     borrowerLastName.append(loan.lastName)
                     borrowerPhoneNumber.append(loan.phoneNumber)
@@ -63,15 +61,15 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
                 }
             })
 
-            detailState.observe(viewLifecycleOwner, { state ->
+            loanRegistrationState.observe(viewLifecycleOwner, { state ->
                 updateUI(state)
             })
         }
     }
 
-    private fun updateUI(state: LoanDetailsState) {
+    private fun updateUI(state: FragmentState) {
         binding.apply {
-            loanCardDetail.visibility = state.loanCardDetailVisibility
+            loanCardDetail.visibility = state.uiVisibility
             progressBar.visibility = state.progressVisibility
         }
     }

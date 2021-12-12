@@ -64,6 +64,11 @@
     <fragment
         android:id="@+id/loan_details_dest"
         android:name="com.test.a2021_q4_tyukavkin.ui.LoanDetailsFragment"
-        android:label="LoanDetailsFragment" />
+        android:label="LoanDetailsFragment">
+        <action
+            android:id="@+id/previous_action"
+            app:destination="@id/loans_history_dest"
+            app:popUpTo="@id/loans_history_dest" />
+    </fragment>
 
 </navigation>

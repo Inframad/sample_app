@@ -3,16 +3,18 @@ package com.test.a2021_q4_tyukavkin.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
+import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
@@ -25,11 +27,16 @@ class LoanRegistrationFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: LoanRegistrationViewModel
 
+    private var errorSnackbar: Snackbar? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as App).appComponent.inject(this)
         viewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[LoanRegistrationViewModel::class.java]
+            ViewModelProvider(
+                requireActivity(),
+                viewModelFactory
+            )[LoanRegistrationViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -49,27 +56,58 @@ class LoanRegistrationFragment : Fragment() {
 
             loanRegistrationBtn.setOnClickListener {
                 Log.i("MyTAG", "Clicked register")
-                viewModel.registerLoan(
-                    LoanRequest(
-                        amount = binding.amountEt.text.toString().toLong(), //TODO Ограничить max value
-                        firstName = binding.firstNameEt.text.toString(),
-                        lastName = binding.lastNameEt.text.toString(),
-                        percent = viewModel.loanConditions.value!!.percent, //TODO Null safety
-                        period = viewModel.loanConditions.value!!.period, //TODO Null safety
-                        phoneNumber = binding.phoneNumberEt.text.toString()
-                    )
-                )
+                viewModel.registerLoan(getLoanRequest())
             }
 
         }
 
-        viewModel.loan.observe(viewLifecycleOwner, { loan ->
-            loan?.let {
-                findNavController().apply {
-                    navigate(R.id.next_action)
+        viewModel.apply {
+            loan.observe(viewLifecycleOwner, { loan ->
+                loan?.let {
+                    findNavController().apply {
+                        navigate(R.id.next_action)
+                    }
                 }
-            }
-        })
+            })
+
+            loanRegistrationState.observe(viewLifecycleOwner, { state ->
+                when (state) {
+                    FragmentState.UNKNOWN_HOST ->
+                        showError(
+                            "Проблемы с интернет соединением",
+                            "Повторить"
+                        ) {
+                            viewModel.registerLoan(getLoanRequest())
+                        }
+                    FragmentState.TIMEOUT ->
+                        showError(
+                            "Время ожидания ответа сервера истекло",
+                            "Повторить"
+                        ) {
+                            viewModel.registerLoan(getLoanRequest())
+                        }
+                }
+            })
+        }
     }
+
+    private fun showError(msg: String, actionName: String, action: (View) -> Unit) {
+        errorSnackbar = Snackbar.make(
+            binding.loanCardConditions,
+            msg,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(actionName, action)
+        errorSnackbar?.show()
+    }
+
+    private fun getLoanRequest() =
+        LoanRequest(
+            amount = binding.amountEt.text.toString().toLong(), //TODO Ограничить max value
+            firstName = binding.firstNameEt.text.toString(),
+            lastName = binding.lastNameEt.text.toString(),
+            percent = viewModel.loanConditions.value!!.percent, //TODO Null safety
+            period = viewModel.loanConditions.value!!.period, //TODO Null safety
+            phoneNumber = binding.phoneNumberEt.text.toString()
+        )
 
 }

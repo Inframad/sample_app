@@ -1,6 +1,5 @@
 package com.test.a2021_q4_tyukavkin.data.repository
 
-import android.util.Log
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.datasource.remote.FocusStartDatasource
 import com.test.a2021_q4_tyukavkin.domain.entity.*

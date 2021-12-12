@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanConditionsBinding
-import com.test.a2021_q4_tyukavkin.presentation.state.LoanConditionsFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
@@ -23,6 +24,8 @@ class LoanConditionsFragment: Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: LoanRegistrationViewModel
+
+    private var errorSnackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +58,23 @@ class LoanConditionsFragment: Fragment() {
             })
 
             conditionsState.observe(viewLifecycleOwner, { state ->
-                updateUI(state)
+                when (state) {
+                    FragmentState.UNKNOWN_HOST ->
+                        showError(
+                            "Проблемы с интернет соединением",
+                            "Обновить"
+                        ) {
+                            viewModel.getLoanConditions()
+                        }
+                    FragmentState.TIMEOUT ->
+                        showError(
+                            "Время ожидания ответа сервера истекло",
+                            "Обновить"
+                        ) {
+                            viewModel.getLoanConditions()
+                        }
+                    else -> updateUI(state)
+                }
             })
         }
 
@@ -64,11 +83,20 @@ class LoanConditionsFragment: Fragment() {
         }
     }
 
-    private fun updateUI(state: LoanConditionsFragmentState) {
+    private fun updateUI(state: FragmentState) {
         binding.apply {
-            loanConditionsCard.visibility = state.loanConditionsCardVisibility
-            progressBar.visibility = state.progressBarVisibility
+            loanConditionsCard.visibility = state.uiVisibility
+            progressBar.visibility = state.progressVisibility
         }
+    }
+
+    private fun showError(msg: String, actionName: String, action: (View) -> Unit) {
+        errorSnackbar = Snackbar.make(
+            binding.loanConditionsCard,
+            msg,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(actionName, action)
+        errorSnackbar?.show()
     }
 
 }

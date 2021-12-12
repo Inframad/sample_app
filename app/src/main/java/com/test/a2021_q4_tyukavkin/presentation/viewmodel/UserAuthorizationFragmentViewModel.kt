@@ -1,6 +1,5 @@
 package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,7 +40,13 @@ class UserAuthorizationFragmentViewModel
             }
             is SocketTimeoutException ->
                 _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
-            else -> Log.e("Error http", "", throwable)
+        }
+    }
+
+    private val registerExceptionHandler = CoroutineExceptionHandler {  _, throwable ->
+        when (throwable) {
+            is SocketTimeoutException ->
+                _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
         }
     }
 
@@ -61,7 +66,7 @@ class UserAuthorizationFragmentViewModel
     }
 
     fun setNetworkState(isAvailable: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(registerExceptionHandler) {
             if (isAvailable) {
                 _state.value = UserAuthorizationFragmentState.DEFAULT
             } else {

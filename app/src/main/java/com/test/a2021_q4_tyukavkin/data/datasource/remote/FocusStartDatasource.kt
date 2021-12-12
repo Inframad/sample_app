@@ -6,15 +6,15 @@ import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.network.FocusStartLoanApi
-import com.test.a2021_q4_tyukavkin.domain.entity.*
-import kotlinx.coroutines.CoroutineDispatcher
+import com.test.a2021_q4_tyukavkin.domain.entity.Auth
+import com.test.a2021_q4_tyukavkin.domain.entity.Loan
+import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
+import com.test.a2021_q4_tyukavkin.domain.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Singleton
-import javax.security.auth.login.LoginException
 
 @Singleton
 class FocusStartDatasource //TODO Naming
