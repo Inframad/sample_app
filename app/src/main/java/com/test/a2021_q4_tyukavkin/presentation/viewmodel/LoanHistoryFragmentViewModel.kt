@@ -36,9 +36,12 @@ class LoanHistoryFragmentViewModel
         Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
 
-    fun getLoans() {
+    init {
         _state.value = FragmentState.LOADING
+        getLoans()
+    }
 
+    fun getLoans() {
         viewModelScope.launch(exceptionHandler) {
             val deferredLoans = async {
                 getLoanListUsecase().map {

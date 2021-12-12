@@ -26,6 +26,13 @@ class LoansHistoryFragment : Fragment() {
     private lateinit var viewModel: LoanHistoryFragmentViewModel
 
     private var errorSnackbar: Snackbar? = null
+    private var loanAdapter = LoanListAdapter { id ->
+        val bundle = Bundle()
+        bundle.putLong("ID", id)
+        findNavController().navigate(
+            R.id.next_action, bundle
+        )
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,6 +52,8 @@ class LoansHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.loansRv.adapter = loanAdapter
+
         viewModel.apply {
 
             getLoans()
@@ -56,7 +65,7 @@ class LoansHistoryFragment : Fragment() {
                             "Проблемы с интернет соединением",
                             "Обновить"
                         ) {
-                           getLoans()
+                            getLoans()
                         }
                     FragmentState.TIMEOUT ->
                         showError(
@@ -71,16 +80,7 @@ class LoansHistoryFragment : Fragment() {
 
             loans.observe(viewLifecycleOwner, { loans ->
                 binding.loansRv.apply {
-
-                    val loanAdapter = LoanAdapter { id ->
-                        val bundle = Bundle()
-                        bundle.putLong("ID", id)
-                        findNavController().navigate(
-                            R.id.next_action, bundle
-                        )
-                    }
-                    loanAdapter.loans = loans
-                    adapter = loanAdapter
+                    loanAdapter.submitList(loans)
                 }
             })
 
