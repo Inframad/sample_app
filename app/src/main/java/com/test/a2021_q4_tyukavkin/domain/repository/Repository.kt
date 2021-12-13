@@ -11,6 +11,6 @@ interface Repository {
     suspend fun createLoan(loanRequest: LoanRequest): Loan
     suspend fun getLoanData(id: Long): Loan
     suspend fun getLoanConditions(): LoanConditions
-    suspend fun updateLoansList()
+    suspend fun updateLoansList(): Boolean
     fun getAllLoans(): Flow<List<Loan>>
 }

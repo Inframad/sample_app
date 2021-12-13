@@ -29,7 +29,7 @@ class Converter @Inject constructor(
             state = when (loan.state) {
                 LoanState.APPROVED -> context.getString(R.string.approved)
                 LoanState.REGISTERED -> context.getString(R.string.registered)
-                LoanState.REJECTED -> context.getString(R.string.rejcted)
+                LoanState.REJECTED -> context.getString(R.string.rejected)
             }
         )
     }

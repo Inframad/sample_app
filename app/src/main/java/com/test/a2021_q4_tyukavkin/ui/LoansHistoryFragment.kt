@@ -56,14 +56,11 @@ class LoansHistoryFragment : Fragment() {
             )
         }
 
-        binding.swiperefresh.setOnRefreshListener {
-            lifecycle.coroutineScope.launch {
-                viewModel.updateLoans()
-            }
-
-        }
-
         binding.list.adapter = loanAdapter
+
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.updateLoans()
+        }
 
         viewModel.apply {
 
@@ -76,7 +73,7 @@ class LoansHistoryFragment : Fragment() {
                             getString(R.string.unknown_host_exception_msg),
                             getString(R.string.refresh)
                         ) {
-                           updateLoans()
+                            updateLoans()
                         }
                     FragmentState.TIMEOUT ->
                         showError(
@@ -86,17 +83,27 @@ class LoansHistoryFragment : Fragment() {
                             updateLoans()
                         }
                     FragmentState.LOADING -> binding.swiperefresh.isRefreshing = true
-                    FragmentState.LOADED -> binding.swiperefresh.isRefreshing = false
-                    else -> {}
+                    FragmentState.LOADED -> {
+                        binding.swiperefresh.isRefreshing = false
+
+                    }
+                    else -> {
+                    }
                 }
             })
 
             lifecycle.coroutineScope.launch {
-                getLoans().collect {
-                    loanAdapter.submitList(it)
+                getLoans().collect { loansList ->
+                    loanAdapter.submitList(loansList)
                 }
             }
+
+            isLoansEmpty.observe(viewLifecycleOwner, {
+                if(it) findNavController().navigate(R.id.action_loans_history_dest_to_welcomeFragment)
+            })
         }
+
+
 
     }
 
@@ -115,5 +122,6 @@ class LoansHistoryFragment : Fragment() {
         ).setAction(actionName, action)
         errorSnackbar?.show()
     }
+
 }
 

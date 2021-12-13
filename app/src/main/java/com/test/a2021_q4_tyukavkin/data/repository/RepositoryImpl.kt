@@ -40,13 +40,12 @@ class RepositoryImpl
                 it.map { loanDto -> loanDto.toLoan() }
             }
 
-    override suspend fun updateLoansList() {
+    override suspend fun updateLoansList(): Boolean =
         withContext(Dispatchers.IO) {
             val loans = focusStartDatasource.getAllLoans()
-            loanDao.deleteAll()
             loanDao.insertAll(loans)
+            loans.isEmpty()
         }
-    }
 
     override suspend fun getLoanConditions(): LoanConditions =
         focusStartDatasource.getLoanConditions()

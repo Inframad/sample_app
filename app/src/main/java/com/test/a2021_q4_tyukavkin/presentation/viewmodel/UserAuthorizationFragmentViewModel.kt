@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class UserAuthorizationFragmentViewModel
@@ -38,6 +39,7 @@ class UserAuthorizationFragmentViewModel
                     404 -> _state.value = UserAuthorizationFragmentState.INVALID_CREDENTIALS
                 }
             }
+            is UnknownHostException -> _state.value = UserAuthorizationFragmentState.NO_INTERNET_CONNECTION
             is SocketTimeoutException ->
                 _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
         }

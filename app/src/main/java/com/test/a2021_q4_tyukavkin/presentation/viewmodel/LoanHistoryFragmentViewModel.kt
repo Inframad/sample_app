@@ -27,6 +27,9 @@ class LoanHistoryFragmentViewModel
     private val _state = MutableLiveData<FragmentState>()
     val state: LiveData<FragmentState> = _state
 
+    private val _isLoansEmpty: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoansEmpty: LiveData<Boolean> = _isLoansEmpty
+
     fun getLoans() = getLoanListUsecase().map {
         it.map { loan -> converter.convertToLoanPresentation(loan) }
     }
@@ -47,8 +50,9 @@ class LoanHistoryFragmentViewModel
         viewModelScope.launch(exceptionHandler) {
             _state.value = FragmentState.LOADING
             val deferredUpdate = async { updateLoansListUsecase() }
-            deferredUpdate.await()
+            _isLoansEmpty.value = deferredUpdate.await()
             _state.value = FragmentState.LOADED
         }
     }
+
 }
