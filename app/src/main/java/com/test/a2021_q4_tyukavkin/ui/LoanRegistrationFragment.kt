@@ -2,10 +2,10 @@ package com.test.a2021_q4_tyukavkin.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,8 +13,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanRegistrationBinding
-import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
-import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
+import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.viewmodel.EditTextError
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
@@ -52,40 +52,63 @@ class LoanRegistrationFragment : Fragment() {
 
         binding.apply {
 
+            firstNameEt.error = getString(R.string.field_should_be_not_empty)
+            lastNameEt.error = getString(R.string.field_should_be_not_empty)
+            phoneNumberEt.error = getString(R.string.field_should_be_not_empty)
+            amountEt.error = getString(R.string.field_should_be_not_empty)
+
             percentTv.text = "${viewModel.loanConditions.value!!.percent}%"
 
             loanRegistrationBtn.setOnClickListener {
-                Log.i("MyTAG", "Clicked register")
-                viewModel.registerLoan(getLoanRequest())
+                    viewModel.registerLoan(getLoanRequest())
             }
 
+            amountEt.doAfterTextChanged {
+                viewModel.checkAmountIsValid(it?.toString())
+            }
         }
 
         viewModel.apply {
-            loan.observe(viewLifecycleOwner, { loan ->
-                loan?.let {
-                    findNavController().apply {
-                        navigate(R.id.next_action)
-                    }
-                }
-            })
 
             loanRegistrationState.observe(viewLifecycleOwner, { state ->
                 when (state) {
-                    FragmentState.UNKNOWN_HOST ->
+                    LoanRegistrationFragmentState.UNKNOWN_HOST ->
                         showError(
                             getString(R.string.unknown_host_exception_msg),
                             getString(R.string.repeat)
                         ) {
                             viewModel.registerLoan(getLoanRequest())
                         }
-                    FragmentState.TIMEOUT ->
+                    LoanRegistrationFragmentState.TIMEOUT ->
                         showError(
                             getString(R.string.timeout_exception_msg),
                             getString(R.string.repeat)
                         ) {
                             viewModel.registerLoan(getLoanRequest())
                         }
+                    LoanRegistrationFragmentState.LOADED ->
+                        findNavController().navigate(R.id.next_action)
+                    LoanRegistrationFragmentState.INCORRECT_INPUT_DATA ->
+                        showError(
+                            "Заполните поля, следуя всплывающим уведомлениям", //TODO Hardcore
+                            "ОК"
+                        ) {}
+                }
+            })
+
+            editTextError.observe(viewLifecycleOwner, { editTextError ->
+                when (editTextError) {
+                    EditTextError.EXCEED_MAX_AMOUNT ->
+                        binding.amountEt.error =
+                            "Макс. значение ${viewModel.loanConditions.value!!.maxAmount}"
+                    EditTextError.AMOUNT_EMPTY ->
+                        binding.amountEt.error = getString(R.string.field_should_be_not_empty)
+                    EditTextError.FIRST_NAME_EMPTY ->
+                        binding.firstNameEt.error = getString(R.string.field_should_be_not_empty)
+                    EditTextError.LAST_NAME_EMPTY ->
+                        binding.lastNameEt.error = getString(R.string.field_should_be_not_empty)
+                    EditTextError.NUMBER_EMPTY ->
+                        binding.phoneNumberEt.error = getString(R.string.field_should_be_not_empty)
                 }
             })
         }
@@ -108,13 +131,10 @@ class LoanRegistrationFragment : Fragment() {
     }
 
     private fun getLoanRequest() =
-        LoanRequest(
-            amount = binding.amountEt.text.toString().toLong(), //TODO Ограничить max value
-            firstName = binding.firstNameEt.text.toString(),
-            lastName = binding.lastNameEt.text.toString(),
-            percent = viewModel.loanConditions.value!!.percent, //TODO Null safety
-            period = viewModel.loanConditions.value!!.period, //TODO Null safety
-            phoneNumber = binding.phoneNumberEt.text.toString()
+       mapOf(
+           "amount" to binding.amountEt.text?.toString(),
+            "firstName" to binding.firstNameEt.text?.toString(),
+            "lastName" to binding.lastNameEt.text?.toString(),
+            "phoneNumber" to binding.phoneNumberEt.text?.toString()
         )
-
 }

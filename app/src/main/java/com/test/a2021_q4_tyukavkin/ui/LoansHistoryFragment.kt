@@ -56,11 +56,18 @@ class LoansHistoryFragment : Fragment() {
             )
         }
 
-        binding.list.adapter = loanAdapter
+        binding.apply {
+            list.adapter = loanAdapter
 
-        binding.swiperefresh.setOnRefreshListener {
-            viewModel.updateLoans()
+            swiperefresh.setOnRefreshListener {
+                viewModel.updateLoans()
+            }
+
+            showConditionsFab.setOnClickListener {
+                findNavController().navigate(R.id.loan_conditions_dest)
+            }
         }
+
 
         viewModel.apply {
 
@@ -99,10 +106,9 @@ class LoansHistoryFragment : Fragment() {
             }
 
             isLoansEmpty.observe(viewLifecycleOwner, {
-                if(it) findNavController().navigate(R.id.action_loans_history_dest_to_welcomeFragment)
+                if (it) findNavController().navigate(R.id.action_loans_history_dest_to_welcomeFragment)
             })
         }
-
 
 
     }

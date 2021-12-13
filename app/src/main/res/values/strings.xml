@@ -35,4 +35,5 @@
     <string name="sign_in">Войти</string>
     <string name="welcome_msg">У вас ещё нет ни одной оформленной заявки, оформите заявку с подходящими условиями.</string>
     <string name="show_conditions">Посмотреть условия</string>
+    <string name="field_should_be_not_empty">Поле не должно быть пустым</string>
 </resources>

@@ -59,9 +59,9 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
                 }
             })
 
-            loanRegistrationState.observe(viewLifecycleOwner, { state ->
+           /* loanRegistrationState.observe(viewLifecycleOwner, { state ->
                 updateUI(state)
-            })
+            })*/ //TODO
         }
     }
 
