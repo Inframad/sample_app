@@ -50,12 +50,10 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
                 binding.apply { //TODO Смена ориентации
                     loanRequestNumber.append(loan.id.toString())
                     loanRequestStatus.append(loan.state)
-                    borrowerFirstName.append(loan.firstName)
-                    borrowerLastName.append(loan.lastName)
+                    borrowerName.append("${loan.firstName} ${loan.lastName}")
                     borrowerPhoneNumber.append(loan.phoneNumber)
                     loanAmount.append(loan.amount.toString())
-                    loanPercent.text = loan.percent.toString()
-                    loanPercent.append("%")
+                    loanPercent.append("${loan.percent}%")
                     loanPeriod.append(loan.period.toString())
                     loanRequestDate.append(" ${loan.date} ${loan.time}")
                 }
@@ -65,6 +63,11 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
                 updateUI(state)
             })
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun updateUI(state: FragmentState) {

@@ -1,17 +1,22 @@
 package com.test.a2021_q4_tyukavkin.data.repository
 
+import com.test.a2021_q4_tyukavkin.data.converter.toLoan
+import com.test.a2021_q4_tyukavkin.data.datasource.local.LoanDao
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.datasource.remote.FocusStartDatasource
 import com.test.a2021_q4_tyukavkin.domain.entity.*
 import com.test.a2021_q4_tyukavkin.domain.repository.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class RepositoryImpl
 @Inject constructor(
     private val focusStartDatasource: FocusStartDatasource,
-    private val localDatasource: LocalDatasource
+    private val localDatasource: LocalDatasource,
+    private val loanDao: LoanDao
 ) :
     Repository {
 
@@ -30,8 +35,18 @@ class RepositoryImpl
     override suspend fun getLoanData(id: Long): Loan =
         focusStartDatasource.getLoanData(id)
 
-    override suspend fun getAllLoans(): List<Loan> =
-        focusStartDatasource.getAllLoans()
+    override fun getAllLoans(): Flow<List<Loan>> =
+            loanDao.getAll().map {
+                it.map { loanDto -> loanDto.toLoan() }
+            }
+
+    override suspend fun updateLoansList() {
+        withContext(Dispatchers.IO) {
+            val loans = focusStartDatasource.getAllLoans()
+            loanDao.deleteAll()
+            loanDao.insertAll(loans)
+        }
+    }
 
     override suspend fun getLoanConditions(): LoanConditions =
         focusStartDatasource.getLoanConditions()

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanDetailsBinding
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanDetailsFragmentViewModel
@@ -44,22 +45,26 @@ class LoanDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let { viewModel.getLoanData(it.getLong("ID")) }
+        if (viewModel.loanId.value == null) {
+            arguments?.let {
+                val loanId = it.getLong("ID")
+                viewModel.setLoanId(loanId)
+                viewModel.getLoanData(loanId)
+            }
+        }
 
         viewModel.apply {
 
             loan.observe(viewLifecycleOwner, { loan ->
-                binding.apply { //TODO Смена ориентации
+                binding.apply {
                     loanRequestNumber.append(loan.id.toString())
-                    loanRequestStatus.append(loan.state.toString())
-                    borrowerFirstName.append(loan.firstName)
-                    borrowerLastName.append(loan.lastName)
+                    loanRequestStatus.append(loan.state)
+                    borrowerName.append("${loan.firstName} ${loan.lastName}")
                     borrowerPhoneNumber.append(loan.phoneNumber)
                     loanAmount.append(loan.amount.toString())
-                    loanPercent.text = loan.percent.toString()
-                    loanPercent.append("%")
+                    loanPercent.append("${loan.percent}%")
                     loanPeriod.append(loan.period.toString())
-                    loanRequestDate.append("${loan.date} ${loan.time}")
+                    loanDate.append("${loan.date} ${loan.time}")
                 }
             })
 
@@ -67,15 +72,15 @@ class LoanDetailsFragment : Fragment() {
                 when (state) {
                     FragmentState.UNKNOWN_HOST ->
                         showError(
-                            "Проблемы с интернет соединением",
-                            "Обновить"
+                            getString(R.string.unknown_host_exception_msg),
+                            getString(R.string.refresh)
                         ) {
                             arguments?.let { viewModel.getLoanData(it.getLong("ID")) }
                         }
                     FragmentState.TIMEOUT ->
                         showError(
-                            "Время ожидания ответа сервера истекло",
-                            "Обновить"
+                            getString(R.string.timeout_exception_msg),
+                            getString(R.string.refresh)
                         ) {
                             arguments?.let { viewModel.getLoanData(it.getLong("ID")) }
                         }
@@ -90,6 +95,8 @@ class LoanDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         errorSnackbar?.dismiss()
+        errorSnackbar = null
+        _binding = null
     }
 
     private fun updateUI(state: FragmentState) {

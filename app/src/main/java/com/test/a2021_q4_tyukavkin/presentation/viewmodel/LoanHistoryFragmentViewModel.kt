@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetAllLoansUsecase
+import com.test.a2021_q4_tyukavkin.domain.usecase.UpdateLoansListUsecase
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
-import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -19,14 +20,16 @@ import javax.inject.Inject
 class LoanHistoryFragmentViewModel
 @Inject constructor(
     private val getLoanListUsecase: GetAllLoansUsecase,
+    private val updateLoansListUsecase: UpdateLoansListUsecase,
     private val converter: Converter
 ) : ViewModel() {
 
-    private val _loans = MutableLiveData<List<LoanPresentaion>>()
-    val loans: LiveData<List<LoanPresentaion>> = _loans
-
     private val _state = MutableLiveData<FragmentState>()
     val state: LiveData<FragmentState> = _state
+
+    fun getLoans() = getLoanListUsecase().map {
+        it.map { loan -> converter.convertToLoanPresentation(loan) }
+    }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         when (throwable) {
@@ -37,18 +40,14 @@ class LoanHistoryFragmentViewModel
     }
 
     init {
-        _state.value = FragmentState.LOADING
-        getLoans()
+        updateLoans()
     }
 
-    fun getLoans() {
+    fun updateLoans() {
+        _state.value = FragmentState.LOADING
         viewModelScope.launch(exceptionHandler) {
-            val deferredLoans = async {
-                getLoanListUsecase().map {
-                    converter.convertToLoanPresentation(it)
-                }
-            }
-            _loans.value = deferredLoans.await()
+            val deferredUpdate = async { updateLoansListUsecase() }
+            deferredUpdate.await()
             _state.value = FragmentState.LOADED
         }
     }

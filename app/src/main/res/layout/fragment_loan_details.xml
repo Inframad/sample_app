@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,7 @@
         android:layout_gravity="center"
         android:layout_margin="32dp"
         android:elevation="16dp"
+        android:theme="@style/CardTextViewStyle"
         app:cardBackgroundColor="@color/secondaryLightColor"
         app:cardCornerRadius="8dp">
 
@@ -41,31 +43,21 @@
 
             <TextView
                 android:id="@+id/borrower"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/borrower"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/loan_request_number" />
 
             <TextView
-                android:id="@+id/borrower_first_name"
+                android:id="@+id/borrower_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/borrower_first_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower" />
-
-            <TextView
-                android:id="@+id/borrower_last_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/borrower_second_name"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/borrower_first_name"
-                app:layout_constraintTop_toBottomOf="@id/borrower" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/borrower"
+                tools:text="@tools:sample/full_names" />
 
             <TextView
                 android:id="@+id/borrower_phone_number"
@@ -75,7 +67,7 @@
                 android:text="@string/borrower_phone_number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower_first_name" />
+                app:layout_constraintTop_toBottomOf="@id/borrower_name" />
 
             <TextView
                 android:id="@+id/loan_amount"
@@ -91,6 +83,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
+                android:text="@string/interest_rate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/loan_amount"
                 app:layout_constraintTop_toBottomOf="@id/borrower_phone_number" />
@@ -109,11 +102,21 @@
                 android:id="@+id/loan_request_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/loan_period"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="end"
                 android:text="@string/loan_request_date"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:gravity="end"/>
+                app:layout_constraintTop_toBottomOf="@id/loan_period" />
+
+            <TextView
+                android:id="@+id/loan_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                tools:text="@tools:sample/date/ddmmyy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loan_request_date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -121,9 +124,9 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

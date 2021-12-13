@@ -32,7 +32,6 @@ class UserAuthorizationFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: UserAuthorizationFragmentViewModel
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -81,7 +80,7 @@ class UserAuthorizationFragment : Fragment() {
         }
 
         viewModel.apply {
-            user.observe(this@UserAuthorizationFragment, { user ->
+            user.observe(viewLifecycleOwner, { user ->
                 Toast.makeText(
                     requireContext(),
                     "Вы успешно зарегистрированы, ${user.name}}",
@@ -89,8 +88,7 @@ class UserAuthorizationFragment : Fragment() {
                 ).show()
             })
 
-            state.observe(this@UserAuthorizationFragment, { state ->
-                updateUI(state)
+            state.observe(viewLifecycleOwner, { state ->
                 when (state) {
                     UserAuthorizationFragmentState.LOADED -> {
                         Log.i("State", "LOADED")
@@ -98,10 +96,15 @@ class UserAuthorizationFragment : Fragment() {
                             navigate(R.id.next_action)
                         }
                     }
-
+                    else -> updateUI(state)
                 }
             })
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun updateUI(state: UserAuthorizationFragmentState) {

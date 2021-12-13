@@ -4,6 +4,7 @@ import android.util.Log
 import com.test.a2021_q4_tyukavkin.data.converter.toLoan
 import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
+import com.test.a2021_q4_tyukavkin.data.datasource.local.LoanDao
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.network.FocusStartLoanApi
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
@@ -20,7 +21,8 @@ import javax.inject.Singleton
 class FocusStartDatasource //TODO Naming
 @Inject constructor(
     private val focusStartLoanApi: FocusStartLoanApi,
-    private val localDatasource: LocalDatasource
+    private val localDatasource: LocalDatasource,
+    private val loanDao: LoanDao
 ) {
 
     private var token: String? = localDatasource.getString("TOKEN") //TODO Const
@@ -69,7 +71,7 @@ class FocusStartDatasource //TODO Naming
 
     suspend fun getAllLoans() =
         withContext(Dispatchers.IO) {
-            focusStartLoanApi.getAllLoans(token!!).map { it.toLoan() }
+            focusStartLoanApi.getAllLoans(token!!)
         }
 
     suspend fun getLoanData(id: Long): Loan =

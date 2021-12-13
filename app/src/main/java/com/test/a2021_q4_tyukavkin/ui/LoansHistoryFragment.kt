@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
@@ -14,6 +15,8 @@ import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoansHistoryBinding
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanHistoryFragmentViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoansHistoryFragment : Fragment() {
@@ -26,13 +29,6 @@ class LoansHistoryFragment : Fragment() {
     private lateinit var viewModel: LoanHistoryFragmentViewModel
 
     private var errorSnackbar: Snackbar? = null
-    private var loanAdapter = LoanListAdapter { id ->
-        val bundle = Bundle()
-        bundle.putLong("ID", id)
-        findNavController().navigate(
-            R.id.next_action, bundle
-        )
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,38 +48,42 @@ class LoansHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val loanAdapter = LoanListAdapter { id ->
+            val bundle = Bundle()
+            bundle.putLong("ID", id)
+            findNavController().navigate(
+                R.id.next_action, bundle
+            )
+        }
         binding.loansRv.adapter = loanAdapter
 
         viewModel.apply {
-
-            getLoans()
 
             state.observe(viewLifecycleOwner, { state ->
                 when (state) {
                     FragmentState.UNKNOWN_HOST ->
                         showError(
-                            "Проблемы с интернет соединением",
-                            "Обновить"
+                            getString(R.string.unknown_host_exception_msg),
+                            getString(R.string.refresh)
                         ) {
-                            getLoans()
+                           updateLoans()
                         }
                     FragmentState.TIMEOUT ->
                         showError(
-                            "Время ожидания ответа сервера истекло",
-                            "Обновить"
+                            getString(R.string.timeout_exception_msg),
+                            getString(R.string.refresh)
                         ) {
-                            getLoans()
+                            updateLoans()
                         }
                     else -> updateUI(state)
                 }
             })
 
-            loans.observe(viewLifecycleOwner, { loans ->
-                binding.loansRv.apply {
-                    loanAdapter.submitList(loans)
+            lifecycle.coroutineScope.launch {
+                getLoans().collect {
+                    loanAdapter.submitList(it)
                 }
-            })
-
+            }
         }
 
     }
@@ -91,11 +91,12 @@ class LoansHistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         errorSnackbar?.dismiss()
+        _binding = null
+        errorSnackbar = null
     }
 
     private fun updateUI(state: FragmentState) {
         binding.progressBar.visibility = state.progressVisibility
-        binding.loansRv.visibility = state.uiVisibility
     }
 
     private fun showError(msg: String, actionName: String, action: (View) -> Unit) {

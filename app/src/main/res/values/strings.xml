@@ -8,7 +8,7 @@
     <string name="amount">Сумма</string>
     <string name="period">Период</string>
     <string name="phone_number">Номер телефона</string>
-    <string name="request_number">Заявка №</string>
+    <string name="request_number">№</string>
     <string name="loan_request_status">Статус:\u0020</string>
     <string name="loan_amount">Сумма:\u0020</string>
     <string name="borrower_first_name">Имя:\u0020</string>
@@ -16,7 +16,7 @@
     <string name="borrower">Заёмщик</string>
     <string name="borrower_phone_number">Номер телефона:\u0020</string>
     <string name="loan_period">Срок:\u0020</string>
-    <string name="loan_request_date">Дата оформления заявки:\u0020</string>
+    <string name="loan_request_date">Дата оформления заявки</string>
     <string name="register_loan">Оформить займ</string>
     <string name="loan_max_amount">Максимальная сумма займа</string>
     <string name="loan_request_percent">Процентная ставка:\u0020</string>
@@ -27,4 +27,10 @@
     <string name="approved">Одобрена</string>
     <string name="registered">Зарегистрирована</string>
     <string name="rejcted">Отклонена</string>
+    <string name="timeout_exception_msg">Время ожидания ответа сервера истекло</string>
+    <string name="refresh">Обновить</string>
+    <string name="unknown_host_exception_msg">Проблемы с интернет соединением</string>
+    <string name="repeat">Повторить</string>
+    <string name="interest_rate">Ставка:\u0020</string>
+    <string name="sign_in">Войти</string>
 </resources>

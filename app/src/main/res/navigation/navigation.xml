@@ -49,13 +49,16 @@
         tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/next_action"
-            app:destination="@id/loan_conditions_dest"
+            app:destination="@id/loans_history_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/registration_dest"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registration_dest_to_placeholder"
+            app:destination="@id/placeholder" />
     </fragment>
     <fragment
         android:id="@+id/loan_successfully_created_dest"
@@ -69,6 +72,11 @@
             android:id="@+id/previous_action"
             app:destination="@id/loans_history_dest"
             app:popUpTo="@id/loans_history_dest" />
+    </fragment>
+    <fragment android:id="@+id/placeholder" >
+        <action
+            android:id="@+id/next_action"
+            app:destination="@id/loan_conditions_dest" />
     </fragment>
 
 </navigation>

@@ -28,6 +28,9 @@ class LoanDetailsFragmentViewModel
     private val _loan: MutableLiveData<LoanPresentaion> = MutableLiveData()
     val loan: LiveData<LoanPresentaion> = _loan
 
+    private val _loanId: MutableLiveData<Long> = MutableLiveData()
+    val loanId: LiveData<Long> = _loanId
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         when (throwable) {
             is UnknownHostException -> _state.value = FragmentState.UNKNOWN_HOST
@@ -36,8 +39,8 @@ class LoanDetailsFragmentViewModel
         Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
 
-    init {
-        _state.value = FragmentState.LOADING
+    fun setLoanId(id: Long) {
+        _loanId.value = id
     }
 
     fun getLoanData(id: Long) {

@@ -13,7 +13,7 @@ class LoanViewHolder(
         binding.apply {
             amountTv.text = loan.amount.toString()
             percentTv.text = "${loan.percent}%"
-            statusTv.text = loan.state.toString()
+            statusTv.text = loan.state
             dateTv.text = loan.date
             timeTv.text = loan.time
         }

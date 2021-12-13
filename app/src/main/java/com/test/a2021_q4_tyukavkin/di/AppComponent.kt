@@ -1,6 +1,7 @@
 package com.test.a2021_q4_tyukavkin.di
 
 import android.content.Context
+import com.test.a2021_q4_tyukavkin.di.data.datasource.DataModule
 import com.test.a2021_q4_tyukavkin.di.data.network.NetworkModule
 import com.test.a2021_q4_tyukavkin.di.domain.DomainModule
 import com.test.a2021_q4_tyukavkin.di.ui.UIModule
@@ -14,7 +15,8 @@ import javax.inject.Singleton
     modules = [
         NetworkModule::class,
         DomainModule::class,
-        UIModule::class
+        UIModule::class,
+        DataModule::class
     ]
 )
 interface AppComponent {

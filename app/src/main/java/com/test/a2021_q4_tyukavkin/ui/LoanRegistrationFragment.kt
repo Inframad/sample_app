@@ -74,21 +74,28 @@ class LoanRegistrationFragment : Fragment() {
                 when (state) {
                     FragmentState.UNKNOWN_HOST ->
                         showError(
-                            "Проблемы с интернет соединением",
-                            "Повторить"
+                            getString(R.string.unknown_host_exception_msg),
+                            getString(R.string.repeat)
                         ) {
                             viewModel.registerLoan(getLoanRequest())
                         }
                     FragmentState.TIMEOUT ->
                         showError(
-                            "Время ожидания ответа сервера истекло",
-                            "Повторить"
+                            getString(R.string.timeout_exception_msg),
+                            getString(R.string.repeat)
                         ) {
                             viewModel.registerLoan(getLoanRequest())
                         }
                 }
             })
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        errorSnackbar?.dismiss()
+        errorSnackbar = null
+        _binding = null
     }
 
     private fun showError(msg: String, actionName: String, action: (View) -> Unit) {

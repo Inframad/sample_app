@@ -30,26 +30,17 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*if (supportFragmentManager.fragments.isEmpty()) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, RegistrationFragment())
-                .commit()
-        }*/
-
-        val navController = findNavController(R.id.my_nav_host_fragment)
-        val graph = navController.navInflater.inflate(R.navigation.navigation)
-
         viewModel.isAuthorized.observe(this, {
             if (it) {
                 if (savedInstanceState == null) {
+                    val navController = findNavController(R.id.my_nav_host_fragment)
+                    val graph = navController.navInflater.inflate(R.navigation.navigation)
                     graph.startDestination = R.id.loans_history_dest
                     navController.graph = graph
                 }
             }
         })
 
-
-        //TODO Internet connection checking
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

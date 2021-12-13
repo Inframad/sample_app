@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO android:usesCleartextTraffic="true" Для разных API-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.test.a2021_q4_tyukavkin">
 
@@ -8,7 +7,6 @@
 
     <application
         android:name=".App"
-        android:usesCleartextTraffic="true"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        const val BASE_URL = "http://focusstart.appspot.com/"
+        const val BASE_URL = "https://focusstart.appspot.com/"
     }
 
     @Provides
@@ -43,7 +43,7 @@ class NetworkModule {
         client: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("http://focusstart.appspot.com/") //TODO Временно
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(scalarsConverterFactory)
             .addConverterFactory(moshiConverterFactory)
