@@ -55,14 +55,14 @@ class LoanDetailsFragment : Fragment() {
 
         viewModel.apply {
 
-            loan.observe(viewLifecycleOwner, { loan ->
+            loanPresentation.observe(viewLifecycleOwner, { loan ->
                 binding.apply {
-                    loanRequestNumber.append(loan.id.toString())
+                    loanRequestNumber.append(loan.id.toString()) //TODO Use placeholders
                     loanRequestStatus.append(loan.state)
                     borrowerName.append("${loan.firstName} ${loan.lastName}")
                     borrowerPhoneNumber.append(loan.phoneNumber)
                     loanAmount.append(loan.amount.toString())
-                    loanPercent.append("${loan.percent}%")
+                    loanPercent.text = loan.percent
                     loanPeriod.append(loan.period.toString())
                     loanDate.append("${loan.date} ${loan.time}")
                 }
@@ -88,6 +88,9 @@ class LoanDetailsFragment : Fragment() {
                 }
             })
 
+            isApproved.observe(viewLifecycleOwner, {
+                binding.approvedInstructionsTv.visibility = View.VISIBLE
+            })
 
         }
     }

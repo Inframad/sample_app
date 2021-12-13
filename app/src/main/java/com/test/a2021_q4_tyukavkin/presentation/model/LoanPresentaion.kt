@@ -7,7 +7,7 @@ data class LoanPresentaion (
     val firstName: String,
     val id: Long,
     val lastName: String,
-    val percent: Double,
+    val percent: String,
     val period: Int,
     val phoneNumber: String,
     val state: String

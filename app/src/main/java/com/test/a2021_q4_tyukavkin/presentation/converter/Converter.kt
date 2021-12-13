@@ -23,7 +23,7 @@ class Converter @Inject constructor(
             firstName = loan.firstName,
             id = loan.id,
             lastName = loan.lastName,
-            percent = loan.percent,
+            percent = context.getString(R.string.percent_tv, loan.percent.toString()),
             period = loan.period,
             phoneNumber = loan.phoneNumber,
             state = when (loan.state) {

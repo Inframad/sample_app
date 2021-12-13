@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.test.a2021_q4_tyukavkin.domain.entity.LoanState
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanDataUsecase
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
@@ -25,8 +26,11 @@ class LoanDetailsFragmentViewModel
     private val _state: MutableLiveData<FragmentState> = MutableLiveData()
     val state: LiveData<FragmentState> = _state
 
-    private val _loan: MutableLiveData<LoanPresentaion> = MutableLiveData()
-    val loan: LiveData<LoanPresentaion> = _loan
+    private val _loanPresentation: MutableLiveData<LoanPresentaion> = MutableLiveData()
+    val loanPresentation: LiveData<LoanPresentaion> = _loanPresentation
+
+    private val _isApproved: MutableLiveData<Boolean> = MutableLiveData()
+    val isApproved: LiveData<Boolean> = _isApproved
 
     private val _loanId: MutableLiveData<Long> = MutableLiveData()
     val loanId: LiveData<Long> = _loanId
@@ -47,7 +51,11 @@ class LoanDetailsFragmentViewModel
         _state.value = FragmentState.LOADING
         viewModelScope.launch(exceptionHandler) {
             val loanDeferred = async { getLoanDataUsecase(id) }
-            _loan.value = converter.convertToLoanPresentation(loanDeferred.await())
+
+            loanDeferred.await().apply {
+                if (this.state == LoanState.APPROVED) _isApproved.value = true
+                _loanPresentation.value = converter.convertToLoanPresentation(this)
+            }
 
             _state.value = FragmentState.LOADED
         }
