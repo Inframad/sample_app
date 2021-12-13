@@ -44,8 +44,8 @@ class LoanHistoryFragmentViewModel
     }
 
     fun updateLoans() {
-        _state.value = FragmentState.LOADING
         viewModelScope.launch(exceptionHandler) {
+            _state.value = FragmentState.LOADING
             val deferredUpdate = async { updateLoansListUsecase() }
             deferredUpdate.await()
             _state.value = FragmentState.LOADED

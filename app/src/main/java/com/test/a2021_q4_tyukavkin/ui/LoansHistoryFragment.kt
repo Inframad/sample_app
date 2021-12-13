@@ -55,9 +55,19 @@ class LoansHistoryFragment : Fragment() {
                 R.id.next_action, bundle
             )
         }
-        binding.loansRv.adapter = loanAdapter
+
+        binding.swiperefresh.setOnRefreshListener {
+            lifecycle.coroutineScope.launch {
+                viewModel.updateLoans()
+            }
+
+        }
+
+        binding.list.adapter = loanAdapter
 
         viewModel.apply {
+
+            updateLoans()
 
             state.observe(viewLifecycleOwner, { state ->
                 when (state) {
@@ -75,7 +85,9 @@ class LoansHistoryFragment : Fragment() {
                         ) {
                             updateLoans()
                         }
-                    else -> updateUI(state)
+                    FragmentState.LOADING -> binding.swiperefresh.isRefreshing = true
+                    FragmentState.LOADED -> binding.swiperefresh.isRefreshing = false
+                    else -> {}
                 }
             })
 
@@ -95,13 +107,9 @@ class LoansHistoryFragment : Fragment() {
         errorSnackbar = null
     }
 
-    private fun updateUI(state: FragmentState) {
-        binding.progressBar.visibility = state.progressVisibility
-    }
-
     private fun showError(msg: String, actionName: String, action: (View) -> Unit) {
         errorSnackbar = Snackbar.make(
-            binding.loansRv,
+            binding.list,
             msg,
             Snackbar.LENGTH_INDEFINITE
         ).setAction(actionName, action)
