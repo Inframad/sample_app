@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.test.a2021_q4_tyukavkin.di.DispatchersDefault
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanConditions
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.usecase.CreateLoanUsecase
@@ -18,11 +19,12 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class LoanRegistrationViewModel //TODO Naming shared viewModel
+class LoanRegistrationViewModel
 @Inject constructor(
     private val getLoanConditionsUsecase: GetLoanConditionsUsecase,
     private val createLoanUsecase: CreateLoanUsecase,
-    private val converter: Converter
+    private val converter: Converter,
+    @DispatchersDefault private val dispatchersDefault: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _conditionsState: MutableLiveData<FragmentState> =
@@ -101,7 +103,7 @@ class LoanRegistrationViewModel //TODO Naming shared viewModel
     }
 
     private suspend fun inputDataIsValid(inputData: Map<String, String?>): Boolean =
-        withContext(Dispatchers.Default) {
+        withContext(dispatchersDefault) {
             inputData.values.map {
                 if (it.isNullOrBlank()) {
                     return@withContext false

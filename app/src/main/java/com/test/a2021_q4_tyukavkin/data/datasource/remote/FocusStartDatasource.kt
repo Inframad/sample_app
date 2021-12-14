@@ -1,40 +1,41 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.remote
 
-import android.util.Log
 import com.test.a2021_q4_tyukavkin.data.converter.toLoan
 import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.network.FocusStartLoanApi
+import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.Loan
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.entity.User
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FocusStartDatasource //TODO Naming
+class FocusStartDatasource
 @Inject constructor(
     private val focusStartLoanApi: FocusStartLoanApi,
-    private val localDatasource: LocalDatasource
+    private val localDatasource: LocalDatasource,
+    @DispatchersIO private val dispatchersIO: CoroutineDispatcher
 ) {
 
     private var token: String? = localDatasource.getString("TOKEN") //TODO Const
 
     suspend fun register(auth: Auth): User =
-        withContext(Dispatchers.IO) { //TODO Провайдить dispatcher
+        withContext(dispatchersIO) {
             focusStartLoanApi.register(auth).toUser()
         }
 
     suspend fun login(auth: Auth) {
-        withContext(Dispatchers.IO) {
-            val deferredToken = async { focusStartLoanApi.login(auth) } //TODO Потокобезопасность
+        withContext(dispatchersIO) {
+            val deferredToken = async { focusStartLoanApi.login(auth) }
             deferredToken.await().apply {
-                token = this
+                token = this  //TODO Потокобезопасность
                 localDatasource.saveString(token) //TODO Небезопасно, использовать Android Keystore
             }
         }
@@ -42,31 +43,17 @@ class FocusStartDatasource //TODO Naming
 
 
     suspend fun getLoanConditions() =
-        withContext(Dispatchers.IO) {
+        withContext(dispatchersIO) {
             focusStartLoanApi.getLoanConditions(token!!).toLoanConditions() //TODO
         }
 
     suspend fun createLoan(loanRequest: LoanRequest): Loan =
-        withContext(Dispatchers.IO) {
-            Log.i("ServerResponse", "Creating loan")
-            focusStartLoanApi.createLoan(token!!, loanRequest).toLoan().also {
-                Log.i("ServerResponse", it.toString())
-            }
-            /*Loan(
-                amount = 1F,
-                date = "123",
-                firstName = "Владимир",
-                id = 123,
-                lastName = "Путин",
-                percent = 20.0,
-                period = 100,
-                phoneNumber = "123",
-                state = LoanState.REGISTERED
-            )*/
+        withContext(dispatchersIO) {
+            focusStartLoanApi.createLoan(token!!, loanRequest).toLoan()
         }
 
     suspend fun getAllLoans() =
-        withContext(Dispatchers.IO) {
+        withContext(dispatchersIO) {
             focusStartLoanApi.getAllLoans(token!!)
         }
 

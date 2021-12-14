@@ -1,13 +1,15 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.local
 
 import android.content.Context
-import kotlinx.coroutines.Dispatchers
+import com.test.a2021_q4_tyukavkin.di.DispatchersIO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LocalDatasource
 @Inject constructor(
-    context: Context
+    context: Context,
+    @DispatchersIO private val  dispatchersIO: CoroutineDispatcher
 ) {
 
     companion object {
@@ -17,7 +19,7 @@ class LocalDatasource
     private val sharedPref = context.getSharedPreferences(DATA, Context.MODE_PRIVATE)
 
     suspend fun saveString(value: String?) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchersIO) {
             with(sharedPref.edit()) {
                 putString("TOKEN", value)
                 apply()

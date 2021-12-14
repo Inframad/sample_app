@@ -49,11 +49,18 @@ class UserAuthorizationFragmentViewModel
         when (throwable) {
             is SocketTimeoutException ->
                 _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
+            is UnknownHostException ->
+                _state.value = UserAuthorizationFragmentState.NO_INTERNET_CONNECTION
+            is retrofit2.HttpException -> {
+                when (throwable.code()) {
+                    400 -> _state.value = UserAuthorizationFragmentState.BUSY_LOGIN
+                }
+            }
         }
     }
 
     fun register(auth: Auth) {
-        viewModelScope.launch {
+        viewModelScope.launch(registerExceptionHandler) {
             _user.value = registrationUsecase(auth)
         }
     }

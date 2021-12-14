@@ -54,6 +54,15 @@ enum class UserAuthorizationFragmentState {
             get() = View.INVISIBLE
         override val warningMsg: String
             get() = "Время ожидания ответа сервера истекло" //TODO Hardcore
+    },
+    BUSY_LOGIN {
+        override val buttonsIsEnabled: Boolean
+            get() = true
+        override val progressVisibility: Int
+            get() = View.INVISIBLE
+        override val warningMsg: String
+            get() = "Логин занят"
+
     };
 
     abstract val buttonsIsEnabled: Boolean

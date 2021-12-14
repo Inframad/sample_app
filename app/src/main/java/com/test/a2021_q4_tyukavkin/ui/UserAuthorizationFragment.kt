@@ -83,7 +83,7 @@ class UserAuthorizationFragment : Fragment() {
             user.observe(viewLifecycleOwner, { user ->
                 Toast.makeText(
                     requireContext(),
-                    "Вы успешно зарегистрированы, ${user.name}}",
+                    "Вы успешно зарегистрированы, ${user.name}",
                     Toast.LENGTH_SHORT
                 ).show()
             })
