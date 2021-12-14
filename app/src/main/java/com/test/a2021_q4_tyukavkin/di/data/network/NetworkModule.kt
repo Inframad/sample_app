@@ -51,7 +51,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideFocusStartLoanApi( //TODO Naming
+    fun provideFocusStartLoanApi(
         retrofit: Retrofit,
     ): FocusStartLoanApi =
         retrofit.create(FocusStartLoanApi::class.java)

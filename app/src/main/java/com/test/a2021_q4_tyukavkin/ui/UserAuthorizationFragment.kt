@@ -35,7 +35,7 @@ class UserAuthorizationFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as App).appComponent.inject(this)
+        (requireContext().applicationContext as App).appComponent.inject(this)
         viewModel =
             ViewModelProvider(
                 this@UserAuthorizationFragment,

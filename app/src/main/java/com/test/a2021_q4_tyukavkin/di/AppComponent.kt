@@ -21,14 +21,15 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
+    @Singleton
     @Component.Factory
     interface Factory {
         fun create(@BindsInstance context: Context): AppComponent //TODO
     }
 
     fun inject(activity: MainActivity)
-    fun inject(fragment: LoanDetailsFragment)
     fun inject(fragment: UserAuthorizationFragment)
+    fun inject(fragment: LoanDetailsFragment)
     fun inject(fragment: LoanSuccessfullyCreatedFragment)
     fun inject(fragment: LoanConditionsFragment)
     fun inject(fragment: LoanRegistrationFragment)

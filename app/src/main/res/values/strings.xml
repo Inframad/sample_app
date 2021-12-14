@@ -38,4 +38,5 @@
     <string name="field_should_be_not_empty">Поле не должно быть пустым</string>
     <string name="percent_tv">%1$s%%</string>
     <string name="loan_approved_instructions">Ваша заявка была одобрена, для получения подробной информации обратитесь в банк.</string>
+    <string name="change_language_msg">Для применения настроек требуется перезапустить приложение.</string>
 </resources>

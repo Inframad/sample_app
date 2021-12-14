@@ -6,6 +6,8 @@ import javax.inject.Inject
 
 class LoginUsecase @Inject constructor(private val repository: Repository) {
 
-    suspend operator fun invoke(auth: Auth) =
+    suspend operator fun invoke(auth: Auth) {
         repository.login(auth)
+    }
+
 }

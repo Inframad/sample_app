@@ -4,7 +4,6 @@ import android.util.Log
 import com.test.a2021_q4_tyukavkin.data.converter.toLoan
 import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
-import com.test.a2021_q4_tyukavkin.data.datasource.local.LoanDao
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.network.FocusStartLoanApi
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
@@ -21,8 +20,7 @@ import javax.inject.Singleton
 class FocusStartDatasource //TODO Naming
 @Inject constructor(
     private val focusStartLoanApi: FocusStartLoanApi,
-    private val localDatasource: LocalDatasource,
-    private val loanDao: LoanDao
+    private val localDatasource: LocalDatasource
 ) {
 
     private var token: String? = localDatasource.getString("TOKEN") //TODO Const
@@ -32,17 +30,15 @@ class FocusStartDatasource //TODO Naming
             focusStartLoanApi.register(auth).toUser()
         }
 
-    suspend fun login(auth: Auth): String =
+    suspend fun login(auth: Auth) {
         withContext(Dispatchers.IO) {
             val deferredToken = async { focusStartLoanApi.login(auth) } //TODO Потокобезопасность
             deferredToken.await().apply {
-                Log.i("MyToken", localDatasource.getString("TOKEN") ?: "Пусто :(")
                 token = this
                 localDatasource.saveString(token) //TODO Небезопасно, использовать Android Keystore
             }
-
-            "OK"
         }
+    }
 
 
     suspend fun getLoanConditions() =
