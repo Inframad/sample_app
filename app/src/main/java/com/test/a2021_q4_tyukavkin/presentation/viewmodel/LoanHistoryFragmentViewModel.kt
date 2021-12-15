@@ -42,15 +42,12 @@ class LoanHistoryFragmentViewModel
         Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
 
-    init {
-        updateLoans()
-    }
-
     fun updateLoans() {
         viewModelScope.launch(exceptionHandler) {
             _state.value = FragmentState.LOADING
             val deferredUpdate = async { updateLoansListUsecase() }
             _isLoansEmpty.value = deferredUpdate.await()
+            Log.i("isLoansEmpty", isLoansEmpty.value.toString())
             _state.value = FragmentState.LOADED
         }
     }

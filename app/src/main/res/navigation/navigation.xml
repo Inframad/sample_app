@@ -50,9 +50,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/loans_history_dest"
-            app:popUpToInclusive="false" />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/registration_dest"
@@ -83,7 +81,8 @@
         android:label="WelcomeFragment">
         <action
             android:id="@+id/next_action"
-            app:destination="@id/loan_conditions_dest" />
+            app:destination="@id/loan_conditions_dest"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>

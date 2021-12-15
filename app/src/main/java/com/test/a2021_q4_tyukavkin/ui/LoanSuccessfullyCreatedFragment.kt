@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.test.a2021_q4_tyukavkin.App
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanSuccessfullyCreatedBinding
-import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
 
@@ -47,21 +49,25 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
         viewModel.apply {
 
             loan.observe(viewLifecycleOwner, { loan ->
-                binding.apply { //TODO Смена ориентации
+                binding.apply {
                     loanRequestNumber.append(loan.id.toString())
                     loanRequestStatus.append(loan.state)
                     borrowerName.append("${loan.firstName} ${loan.lastName}")
                     borrowerPhoneNumber.append(loan.phoneNumber)
                     loanAmount.append(loan.amount.toString())
-                    loanPercent.append("${loan.percent}%")
+                    loanPercent.text = loan.percent
                     loanPeriod.append(loan.period.toString())
                     loanRequestDate.append(" ${loan.date} ${loan.time}")
                 }
             })
 
-           /* loanRegistrationState.observe(viewLifecycleOwner, { state ->
-                updateUI(state)
-            })*/ //TODO
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().apply {
+                popBackStack()
+                navigate(R.id.loans_history_dest)
+            }
         }
     }
 
@@ -70,10 +76,4 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
         _binding = null
     }
 
-    private fun updateUI(state: FragmentState) {
-        binding.apply {
-            loanCardDetail.visibility = state.uiVisibility
-            progressBar.visibility = state.progressVisibility
-        }
-    }
 }
