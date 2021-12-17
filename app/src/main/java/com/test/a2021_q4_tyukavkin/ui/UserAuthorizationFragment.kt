@@ -33,6 +33,18 @@ class UserAuthorizationFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: UserAuthorizationFragmentViewModel
 
+    private var connectivityManager: ConnectivityManager? = null
+
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            viewModel.setNetworkState(isAvailable = true)
+        }
+
+        override fun onLost(network: Network) {
+            viewModel.setNetworkState(isAvailable = false)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -108,6 +120,8 @@ class UserAuthorizationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        connectivityManager?.unregisterNetworkCallback(networkCallback)
+        connectivityManager = null
     }
 
     private fun updateUI(state: UserAuthorizationFragmentState) {
@@ -119,25 +133,15 @@ class UserAuthorizationFragment : Fragment() {
     }
 
     private fun setNetworkConnectionListener() {
-        val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                viewModel.setNetworkState(isAvailable = true)
-            }
-
-            override fun onLost(network: Network) {
-                viewModel.setNetworkState(isAvailable = false)
-            }
-        }
-
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+            connectivityManager?.registerDefaultNetworkCallback(networkCallback)
         } else {
             val request = NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .build()
-            connectivityManager.registerNetworkCallback(request, networkCallback)
+            connectivityManager?.registerNetworkCallback(request, networkCallback)
         }
     }
 
