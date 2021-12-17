@@ -8,8 +8,6 @@ enum class UserAuthorizationFragmentState {
             get() = true
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = ""
 
     },
     LOADING{
@@ -17,8 +15,6 @@ enum class UserAuthorizationFragmentState {
             get() = false
         override val progressVisibility: Int
             get() = View.VISIBLE
-        override val warningMsg: String
-            get() = ""
 
     },
     LOADED {
@@ -26,8 +22,6 @@ enum class UserAuthorizationFragmentState {
             get() = true
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = ""
 
     },
     INVALID_CREDENTIALS {
@@ -35,8 +29,6 @@ enum class UserAuthorizationFragmentState {
             get() = true
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = "Неверный логин или пароль" //TODO Hardcore
 
     },
     NO_INTERNET_CONNECTION {
@@ -44,28 +36,21 @@ enum class UserAuthorizationFragmentState {
             get() = false
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = "Проверьте интернет соединение" //TODO Hardcore
     },
     TIMEOUT_EXCEPTION {
         override val buttonsIsEnabled: Boolean
             get() = true
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = "Время ожидания ответа сервера истекло" //TODO Hardcore
     },
     BUSY_LOGIN {
         override val buttonsIsEnabled: Boolean
             get() = true
         override val progressVisibility: Int
             get() = View.INVISIBLE
-        override val warningMsg: String
-            get() = "Логин занят"
 
     };
 
     abstract val buttonsIsEnabled: Boolean
     abstract val progressVisibility: Int
-    abstract val warningMsg: String
 }

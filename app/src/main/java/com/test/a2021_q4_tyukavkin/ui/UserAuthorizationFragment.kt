@@ -20,6 +20,7 @@ import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState.*
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.UserAuthorizationFragmentViewModel
 import javax.inject.Inject
 
@@ -83,19 +84,21 @@ class UserAuthorizationFragment : Fragment() {
             user.observe(viewLifecycleOwner, { user ->
                 Toast.makeText(
                     requireContext(),
-                    "Вы успешно зарегистрированы, ${user.name}",
+                    getString(R.string.successful_registration, user.name),
                     Toast.LENGTH_SHORT
                 ).show()
             })
 
             state.observe(viewLifecycleOwner, { state ->
                 when (state) {
-                    UserAuthorizationFragmentState.LOADED -> {
-                        Log.i("State", "LOADED")
+                    LOADED ->
                         this@UserAuthorizationFragment.findNavController().apply {
                             navigate(R.id.next_action)
                         }
-                    }
+                    NO_INTERNET_CONNECTION -> setWarningMessage(getString(R.string.check_network_connection_msg))
+                    INVALID_CREDENTIALS -> setWarningMessage(getString(R.string.invalid_credentials_msg))
+                    TIMEOUT_EXCEPTION -> setWarningMessage(getString(R.string.timeout_exception_msg))
+                    BUSY_LOGIN -> setWarningMessage(getString(R.string.busy_login_msg))
                     else -> updateUI(state)
                 }
             })
@@ -112,7 +115,6 @@ class UserAuthorizationFragment : Fragment() {
             loginBtn.isEnabled = state.buttonsIsEnabled
             registerBtn.isEnabled = state.buttonsIsEnabled
             progressBar.visibility = state.progressVisibility
-            warningMessageTv.text = state.warningMsg
         }
     }
 
@@ -137,6 +139,10 @@ class UserAuthorizationFragment : Fragment() {
                 .build()
             connectivityManager.registerNetworkCallback(request, networkCallback)
         }
+    }
+
+    private fun setWarningMessage(msg: String) {
+        binding.warningMessageTv.text = msg
     }
 
 }

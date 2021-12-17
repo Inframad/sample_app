@@ -57,7 +57,7 @@ class LoanRegistrationFragment : Fragment() {
             phoneNumberEt.error = getString(R.string.field_should_be_not_empty)
             amountEt.error = getString(R.string.field_should_be_not_empty)
 
-            percentTv.text = "${viewModel.loanConditions.value!!.percent}%"
+            percentTv.text = getString(R.string.percent_tv, viewModel.loanConditions.value!!.percent.toString())
 
             loanRegistrationBtn.setOnClickListener {
                     viewModel.registerLoan(getLoanRequest())
@@ -90,8 +90,8 @@ class LoanRegistrationFragment : Fragment() {
                         findNavController().navigate(R.id.next_action)
                     LoanRegistrationFragmentState.INCORRECT_INPUT_DATA ->
                         showError(
-                            "Заполните поля, следуя всплывающим уведомлениям", //TODO Hardcore
-                            "ОК"
+                            getString(R.string.incorrect_input_msg),
+                            getString(R.string.ok)
                         ) {}
                 }
             })
@@ -100,7 +100,7 @@ class LoanRegistrationFragment : Fragment() {
                 when (editTextError) {
                     EditTextError.EXCEED_MAX_AMOUNT ->
                         binding.amountEt.error =
-                            "Макс. значение ${viewModel.loanConditions.value!!.maxAmount}"
+                            getString(R.string.max_amount_exceeded_msg, viewModel.loanConditions.value!!.maxAmount.toString())
                     EditTextError.AMOUNT_EMPTY ->
                         binding.amountEt.error = getString(R.string.field_should_be_not_empty)
                     EditTextError.FIRST_NAME_EMPTY ->
