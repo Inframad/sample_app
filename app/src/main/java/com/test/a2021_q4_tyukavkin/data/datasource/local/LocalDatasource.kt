@@ -1,6 +1,7 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.local
 
 import android.content.Context
+import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -9,7 +10,8 @@ import javax.inject.Inject
 class LocalDatasource
 @Inject constructor(
     context: Context,
-    @DispatchersIO private val  dispatchersIO: CoroutineDispatcher
+    private val loanDao: LoanDao,
+    @DispatchersIO private val dispatchersIO: CoroutineDispatcher
 ) {
 
     companion object {
@@ -18,16 +20,22 @@ class LocalDatasource
 
     private val sharedPref = context.getSharedPreferences(DATA, Context.MODE_PRIVATE)
 
-    suspend fun saveString(value: String?) {
-        withContext(dispatchersIO) {
-            with(sharedPref.edit()) {
-                putString("TOKEN", value)
-                apply()
-            }
+    fun saveString(value: String?) {
+        with(sharedPref.edit()) {
+            putString("TOKEN", value)
+            apply()
         }
     }
 
     fun getString(key: String): String? =
-            sharedPref.getString(key, null)
+        sharedPref.getString(key, null)
+
+    suspend fun insertLoans(loans: List<LoanDTO>) =
+        withContext(dispatchersIO) {
+            loanDao.insertAll(loans)
+        }
+
+    fun getAllLoans() =
+        loanDao.getAll()
 
 }
