@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.usecase.CheckAuthorizationUsecase
+import com.test.a2021_q4_tyukavkin.domain.usecase.LogoutUsecase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivityViewModel
 @Inject constructor(
-    private val checkAuthorizationUsecase: CheckAuthorizationUsecase
+    private val checkAuthorizationUsecase: CheckAuthorizationUsecase,
+    private val logoutUsecase: LogoutUsecase
 ) : ViewModel() {
 
     private val _isAuthorized: MutableLiveData<Boolean> = MutableLiveData()
@@ -24,4 +26,9 @@ class MainActivityViewModel
         }
     }
 
+    fun logout() {
+        viewModelScope.launch {
+            logoutUsecase()
+        }
+    }
 }

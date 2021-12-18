@@ -130,6 +130,5 @@ class LoansHistoryFragment : Fragment() {
         ).setAction(actionName, action)
         errorSnackbar?.show()
     }
-
 }
 

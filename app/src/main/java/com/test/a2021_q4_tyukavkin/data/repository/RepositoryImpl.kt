@@ -35,9 +35,15 @@ class RepositoryImpl
             val deferredToken = async { focusStartDatasource.login(auth) }
             deferredToken.await().apply {
                 token = this
-                localDatasource.saveString(this) //TODO Небезопасно, использовать Android Keystore
+                localDatasource.saveString("TOKEN", this) //TODO Небезопасно, использовать Android Keystore
             }
         }
+    }
+
+    override suspend fun logout() {
+        token = null
+        localDatasource.deleteAllLoans()
+        localDatasource.deleteString("TOKEN")
     }
 
     override suspend fun createLoan(loanRequest: LoanRequest): Loan =

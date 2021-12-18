@@ -85,4 +85,12 @@
             app:popUpToInclusive="false" />
     </fragment>
 
+    <action
+        android:id="@+id/to_registration"
+        app:destination="@id/registration_dest"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
+        app:popEnterAnim="@anim/slide_in_right"
+        app:popExitAnim="@anim/slide_out_left" />
+
 </navigation>

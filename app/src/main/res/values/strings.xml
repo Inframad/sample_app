@@ -47,4 +47,5 @@
     <string name="ok">ОК</string>
     <string name="max_amount_exceeded_msg">Макс. значение %1$s</string>
     <string name="show_loan_conditions">Show loan conditions</string>
+    <string name="logout">Выйти</string>
 </resources>

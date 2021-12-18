@@ -20,15 +20,22 @@ class LocalDatasource
 
     private val sharedPref = context.getSharedPreferences(DATA, Context.MODE_PRIVATE)
 
-    fun saveString(value: String?) {
+    fun saveString(key: String, value: String?) {
         with(sharedPref.edit()) {
-            putString("TOKEN", value)
+            putString(key, value)
             apply()
         }
     }
 
     fun getString(key: String): String? =
         sharedPref.getString(key, null)
+
+    fun deleteString(key: String) {
+        with(sharedPref.edit()) {
+            putString(key, null)
+            apply()
+        }
+    }
 
     suspend fun insertLoans(loans: List<LoanDTO>) =
         withContext(dispatchersIO) {
@@ -37,5 +44,11 @@ class LocalDatasource
 
     fun getAllLoans() =
         loanDao.getAll()
+
+    suspend fun deleteAllLoans() {
+        withContext(dispatchersIO) {
+            loanDao.deleteAll()
+        }
+    }
 
 }

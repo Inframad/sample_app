@@ -8,9 +8,7 @@ import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -67,6 +65,8 @@ class UserAuthorizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         setNetworkConnectionListener()
 
         binding.apply {
@@ -111,8 +111,8 @@ class UserAuthorizationFragment : Fragment() {
                     INVALID_CREDENTIALS -> setWarningMessage(getString(R.string.invalid_credentials_msg))
                     TIMEOUT_EXCEPTION -> setWarningMessage(getString(R.string.timeout_exception_msg))
                     BUSY_LOGIN -> setWarningMessage(getString(R.string.busy_login_msg))
-                    else -> updateUI(state)
                 }
+                updateUI(state)
             })
         }
     }
@@ -149,4 +149,8 @@ class UserAuthorizationFragment : Fragment() {
         binding.warningMessageTv.text = msg
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+    }
 }
