@@ -9,6 +9,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -29,58 +30,48 @@ class UserAuthorizationFragmentViewModel
     val state: LiveData<UserAuthorizationFragmentState> = _state
 
     init {
-        _state.value = UserAuthorizationFragmentState.DEFAULT
+        _state.value = DEFAULT
     }
 
     private val loginExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        when (throwable) {
-            is retrofit2.HttpException -> {
-                when (throwable.code()) {
-                    404 -> _state.value = UserAuthorizationFragmentState.INVALID_CREDENTIALS
-                }
-            }
-            is UnknownHostException -> _state.value = UserAuthorizationFragmentState.NO_INTERNET_CONNECTION
-            is SocketTimeoutException ->
-                _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
+        _state.value = when (throwable) {
+            is IllegalAccessException -> INVALID_CREDENTIALS
+            is UnknownHostException -> NO_INTERNET_CONNECTION
+            is SocketTimeoutException -> TIMEOUT_EXCEPTION
+            else -> UNKNOWN_ERROR
         }
     }
 
-    private val registerExceptionHandler = CoroutineExceptionHandler {  _, throwable ->
-        when (throwable) {
-            is SocketTimeoutException ->
-                _state.value = UserAuthorizationFragmentState.TIMEOUT_EXCEPTION
-            is UnknownHostException ->
-                _state.value = UserAuthorizationFragmentState.NO_INTERNET_CONNECTION
-            is retrofit2.HttpException -> {
-                when (throwable.code()) {
-                    400 -> _state.value = UserAuthorizationFragmentState.BUSY_LOGIN
-                }
-            }
+    private val registerExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _state.value = when (throwable) {
+            is SocketTimeoutException -> TIMEOUT_EXCEPTION
+            is UnknownHostException -> NO_INTERNET_CONNECTION
+            is IllegalArgumentException -> BUSY_LOGIN
+            else -> UNKNOWN_ERROR
         }
     }
 
     fun register(auth: Auth) {
         viewModelScope.launch(registerExceptionHandler) {
-            _user.value = registrationUsecase(auth)
+            _state.value = LOADING
+            val deferredRegister = async { registrationUsecase(auth) }
+            _user.value = deferredRegister.await()
+            _state.value = LOADED
         }
     }
 
     fun login(auth: Auth) {
         viewModelScope.launch(loginExceptionHandler) {
-            _state.value = UserAuthorizationFragmentState.LOADING
+            _state.value = LOADING
             val deferredLogging = async { loginUsecase(auth) }
             deferredLogging.await()
-            _state.value = UserAuthorizationFragmentState.LOADED
+            _state.value = LOADED
         }
     }
 
     fun setNetworkState(isAvailable: Boolean) {
         viewModelScope.launch(registerExceptionHandler) {
-            if (isAvailable) {
-                _state.value = UserAuthorizationFragmentState.DEFAULT
-            } else {
-                _state.value = UserAuthorizationFragmentState.NO_INTERNET_CONNECTION
-            }
+            _state.value = if (isAvailable) DEFAULT else NO_INTERNET_CONNECTION
         }
     }
 

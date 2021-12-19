@@ -9,6 +9,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,13 +21,28 @@ class FocusStartDatasource
 ) {
     suspend fun register(auth: Auth): UserDTO =
         withContext(dispatchersIO) {
-            focusStartLoanApi.register(auth)
+            return@withContext try {
+                focusStartLoanApi.register(auth)
+            } catch (httpException: retrofit2.HttpException) {
+                when (httpException.code()) {
+                    400 -> throw IllegalArgumentException("Busy login")
+                    else -> throw UnknownError(httpException.message)
+                }
+            }
         }
 
     suspend fun login(auth: Auth): String =
         withContext(dispatchersIO) {
-            focusStartLoanApi.login(auth)
+            return@withContext try {
+                focusStartLoanApi.login(auth)
+            } catch (httpException: retrofit2.HttpException) {
+                when (httpException.code()) {
+                    404 -> throw IllegalAccessException("Invalid credentials")
+                    else -> throw UnknownError(httpException.message)
+                }
+            }
         }
+
 
     suspend fun getLoanConditions(token: String) =
         withContext(dispatchersIO) {
