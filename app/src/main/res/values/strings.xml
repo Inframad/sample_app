@@ -38,7 +38,6 @@
     <string name="field_should_be_not_empty">Поле не должно быть пустым</string>
     <string name="percent_tv">%1$s%%</string>
     <string name="loan_approved_instructions">Ваша заявка была одобрена, для получения подробной информации обратитесь в банк.</string>
-    <string name="change_language_msg">Для применения настроек требуется перезапустить приложение.</string>
     <string name="successful_registration">Вы успешно зарегистрированы, %1$s</string>
     <string name="check_network_connection_msg">Проверьте интернет соединение</string>
     <string name="invalid_credentials_msg">Неверный логин или пароль</string>
@@ -48,4 +47,6 @@
     <string name="max_amount_exceeded_msg">Макс. значение %1$s</string>
     <string name="show_loan_conditions">Show loan conditions</string>
     <string name="logout">Выйти</string>
+    <string name="english">Английский (США)</string>
+    <string name="russian">Русский</string>
 </resources>
