@@ -32,19 +32,12 @@ class LoanDetailsFragmentViewModel
     private val _isApproved: MutableLiveData<Boolean> = MutableLiveData()
     val isApproved: LiveData<Boolean> = _isApproved
 
-    private val _loanId: MutableLiveData<Long> = MutableLiveData()
-    val loanId: LiveData<Long> = _loanId
-
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         when (throwable) {
             is UnknownHostException -> _state.value = FragmentState.UNKNOWN_HOST
             is SocketTimeoutException -> _state.value = FragmentState.TIMEOUT
         }
         Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
-    }
-
-    fun setLoanId(id: Long) {
-        _loanId.value = id
     }
 
     fun getLoanData(id: Long) {

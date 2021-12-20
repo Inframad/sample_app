@@ -10,7 +10,7 @@ object LocaleChanger {
 
         val savedLocale =
             context.getSharedPreferences("lang", Context.MODE_PRIVATE)
-                .getString("lang", null)?.let { Locale(it, "rUS") }
+                .getString("lang", null)?.let { Locale(it, "rUS") } //TODO Country
                 ?: return context
 
         Locale.setDefault(savedLocale)

@@ -105,6 +105,7 @@ class UserAuthorizationFragment : Fragment() {
                 when (state) {
                     LOADED ->
                         this@UserAuthorizationFragment.findNavController().apply {
+                            popBackStack()
                             navigate(R.id.next_action)
                         }
                     NO_INTERNET_CONNECTION -> setWarningMessage(getString(R.string.check_network_connection_msg))

@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
                     repeat(this.backStack.size) { popBackStack() }
                     navigate(R.id.to_registration)
                 }
-                recreate()
             }
         }
         return true

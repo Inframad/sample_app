@@ -9,14 +9,14 @@
     <string name="amount">Amount</string>
     <string name="period">Period</string>
     <string name="phone_number">Phone number</string>
-    <string name="request_number">#</string>
-    <string name="loan_request_status">Status:\u0020</string>
-    <string name="loan_amount">Amount:\u0020</string>
+    <string name="request_number">#%1$s</string>
+    <string name="loan_request_status">Status: %1$s</string>
+    <string name="loan_amount">Amount: %1$s</string>
     <string name="borrower_first_name">First name:\u0020</string>
     <string name="borrower_second_name">Last name:\u0020</string>
     <string name="borrower">Borrower</string>
-    <string name="borrower_phone_number">Phone number:\u0020</string>
-    <string name="loan_period">Period:\u0020</string>
+    <string name="borrower_phone_number">Phone number: %1$s</string>
+    <string name="loan_period">Period: %1$s</string>
     <string name="loan_request_date">Registration date</string>
     <string name="register_loan">Apply for a loan</string>
     <string name="loan_max_amount">Maximum loan amount</string>
@@ -50,4 +50,7 @@
     <string name="logout">Logout</string>
     <string name="english">English (US)</string>
     <string name="russian">Russian</string>
+    <string name="borrower_name">%1$s %2$s</string>
+    <string name="loan_date">%1$s %2$s</string>
+    <string name="arrange">Arrange</string>
 </resources>

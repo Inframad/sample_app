@@ -50,14 +50,14 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
 
             loan.observe(viewLifecycleOwner, { loan ->
                 binding.apply {
-                    loanRequestNumber.append(loan.id.toString())
-                    loanRequestStatus.append(loan.state)
-                    borrowerName.append("${loan.firstName} ${loan.lastName}")
-                    borrowerPhoneNumber.append(loan.phoneNumber)
-                    loanAmount.append(loan.amount.toString())
+                    loanRequestNumber.text = getString(R.string.request_number, loan.id.toString())
+                    loanRequestStatus.text = getString(R.string.loan_request_status, loan.state)
+                    borrowerName.text = getString(R.string.borrower_name, loan.firstName, loan.lastName)
+                    borrowerPhoneNumber.text = getString(R.string.borrower_phone_number, loan.phoneNumber)
+                    loanAmount.text = getString(R.string.loan_amount, loan.amount.toString())
                     loanPercent.text = loan.percent
-                    loanPeriod.append(loan.period.toString())
-                    loanRequestDate.append(" ${loan.date} ${loan.time}")
+                    loanPeriod.text = getString(R.string.loan_period, loan.period.toString())
+                    loanDate.text = getString(R.string.loan_date, loan.date, loan.time)
                 }
             })
 
