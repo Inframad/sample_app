@@ -2,14 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/enUs"
-        android:title="@string/english" />
-
-    <item
-        android:id="@+id/ru"
-        android:title="@string/russian" />
-
-    <item
         android:id="@+id/logout"
         android:title="@string/logout" />
 </menu>

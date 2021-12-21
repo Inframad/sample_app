@@ -8,9 +8,7 @@ import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class Converter @Inject constructor(
     private val context: Context
 ) {

@@ -1,5 +1,6 @@
 package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,7 @@ class UserAuthorizationFragmentViewModel
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
             else -> UNKNOWN_ERROR
         }
+        Log.e("MyTAG", "ERROR", throwable)
     }
 
     private val registerExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -53,10 +55,8 @@ class UserAuthorizationFragmentViewModel
 
     fun register(auth: Auth) {
         viewModelScope.launch(registerExceptionHandler) {
-            _state.value = LOADING
             val deferredRegister = async { registrationUsecase(auth) }
             _user.value = deferredRegister.await()
-            _state.value = LOADED
         }
     }
 

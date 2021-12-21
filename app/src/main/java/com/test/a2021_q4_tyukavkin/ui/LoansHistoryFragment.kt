@@ -49,6 +49,8 @@ class LoansHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.i("MyTAG", "LoansHistoryFragment onViewCreated")
+
         val loanAdapter = LoanListAdapter { id ->
             val bundle = Bundle()
             bundle.putLong("ID", id)
