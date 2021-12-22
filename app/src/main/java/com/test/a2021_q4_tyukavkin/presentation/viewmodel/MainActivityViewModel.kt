@@ -2,11 +2,11 @@ package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.usecase.CheckAuthorizationUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.LogoutUsecase
+import com.test.a2021_q4_tyukavkin.presentation.SingleLiveEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class MainActivityViewModel
     private val logoutUsecase: LogoutUsecase
 ) : ViewModel() {
 
-    private val _isAuthorized: MutableLiveData<Boolean> = MutableLiveData()
+    private val _isAuthorized: SingleLiveEvent<Boolean> = SingleLiveEvent()
     val isAuthorized: LiveData<Boolean> = _isAuthorized
 
     init {

@@ -35,9 +35,10 @@ class LoanHistoryFragmentViewModel
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        when (throwable) {
-            is UnknownHostException -> _state.value = FragmentState.UNKNOWN_HOST
-            is SocketTimeoutException -> _state.value = FragmentState.TIMEOUT
+        _state.value = when (throwable) {
+            is UnknownHostException ->  FragmentState.UNKNOWN_HOST
+            is SocketTimeoutException -> FragmentState.TIMEOUT
+            else -> FragmentState.UNKNOWN_ERROR
         }
         Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
@@ -47,7 +48,6 @@ class LoanHistoryFragmentViewModel
             _state.value = FragmentState.LOADING
             val deferredUpdate = async { updateLoansListUsecase() }
             _isLoansEmpty.value = deferredUpdate.await()
-            Log.i("isLoansEmpty", isLoansEmpty.value.toString())
             _state.value = FragmentState.LOADED
         }
     }

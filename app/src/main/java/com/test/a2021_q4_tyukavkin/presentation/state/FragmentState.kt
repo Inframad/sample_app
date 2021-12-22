@@ -14,7 +14,8 @@ enum class FragmentState {
 
     },
     UNKNOWN_HOST,
-    TIMEOUT;
+    TIMEOUT,
+    UNKNOWN_ERROR;
 
     open val uiVisibility: Int = View.INVISIBLE
     open val progressVisibility: Int = View.VISIBLE

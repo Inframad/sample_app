@@ -73,6 +73,10 @@ class LoanConditionsFragment: Fragment() {
                         ) {
                             viewModel.getLoanConditions()
                         }
+                    FragmentState.UNKNOWN_ERROR -> showError(
+                        getString(R.string.unknown_error_msg),
+                        getString(R.string.ok)
+                    ) {}
                     else -> updateUI(state)
                 }
             })

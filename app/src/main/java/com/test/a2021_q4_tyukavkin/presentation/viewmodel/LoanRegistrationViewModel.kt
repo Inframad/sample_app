@@ -5,16 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.test.a2021_q4_tyukavkin.di.DispatchersDefault
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanConditions
+import com.test.a2021_q4_tyukavkin.domain.entity.LoanRegistrationInputData
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.usecase.CreateLoanUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanConditionsUsecase
+import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanRegistrationInputDataErrorsUsecase
+import com.test.a2021_q4_tyukavkin.presentation.SingleLiveEvent
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
+import com.test.a2021_q4_tyukavkin.presentation.model.EditTextError
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -23,8 +28,8 @@ class LoanRegistrationViewModel
 @Inject constructor(
     private val getLoanConditionsUsecase: GetLoanConditionsUsecase,
     private val createLoanUsecase: CreateLoanUsecase,
-    private val converter: Converter,
-    @DispatchersDefault private val dispatchersDefault: CoroutineDispatcher
+    private val getLoanRegistrationInputDataErrorsUsecase: GetLoanRegistrationInputDataErrorsUsecase,
+    private val converter: Converter
 ) : ViewModel() {
 
     private val _conditionsState: MutableLiveData<FragmentState> =
@@ -38,7 +43,7 @@ class LoanRegistrationViewModel
     private val _loanConditions: MutableLiveData<LoanConditions> = MutableLiveData()
     val loanConditions: LiveData<LoanConditions> = _loanConditions
 
-    private val _editTextError: MutableLiveData<EditTextError> = MutableLiveData()
+    private val _editTextError: SingleLiveEvent<EditTextError> = SingleLiveEvent()
     val editTextError: LiveData<EditTextError> = _editTextError
 
     private val _loan: MutableLiveData<LoanPresentaion> = MutableLiveData()
@@ -48,8 +53,11 @@ class LoanRegistrationViewModel
         when (throwable) {
             is UnknownHostException -> _conditionsState.value = FragmentState.UNKNOWN_HOST
             is SocketTimeoutException -> _conditionsState.value = FragmentState.TIMEOUT
+            else -> {
+                _conditionsState.value = FragmentState.UNKNOWN_ERROR
+                Log.e("LoanRegistrationVM", "exceptionHandlerGetRequest", throwable)
+            }
         }
-        Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
 
     private val exceptionHandlerPostRequest = CoroutineExceptionHandler { _, throwable ->
@@ -58,8 +66,13 @@ class LoanRegistrationViewModel
                 LoanRegistrationFragmentState.UNKNOWN_HOST
             is SocketTimeoutException -> _loanRegistrationState.value =
                 LoanRegistrationFragmentState.TIMEOUT
+            is NumberFormatException -> _loanRegistrationState.value =
+                LoanRegistrationFragmentState.INCORRECT_INPUT_DATA
+            else -> {
+                LoanRegistrationFragmentState.UNKNOWN_ERROR
+                Log.e("LoanRegistrationVM", "exceptionHandlerPostRequest", throwable)
+            }
         }
-        Log.e("ExceptionHandler", throwable.javaClass.toString(), throwable)
     }
 
     init {
@@ -75,55 +88,44 @@ class LoanRegistrationViewModel
         }
     }
 
-    fun registerLoan(inputData: Map<String, String?>) {
+    fun registerLoan(inputData: LoanRegistrationInputData) {
         viewModelScope.launch(exceptionHandlerPostRequest) {
-            if (inputDataIsValid(inputData)) {
+            val inputDataErrors =
+                getLoanRegistrationInputDataErrorsUsecase(inputData, loanConditions.value!!)
+            if (inputDataErrors.isEmpty()) {
                 _loanRegistrationState.value = LoanRegistrationFragmentState.LOADING
 
-                val deferredLoan = async { createLoanUsecase(createLoanRequest(inputData)) }
+                val deferredLoan = async {
+                    createLoanUsecase(
+                        LoanRequest(
+                            amount = inputData.amount.toString().toLong(),
+                            firstName = inputData.firstName.toString(),
+                            lastName = inputData.lastName.toString(),
+                            percent = loanConditions.value!!.percent,
+                            period = loanConditions.value!!.period,
+                            phoneNumber = inputData.phoneNumber.toString()
+                        )
+                    )
+                }
                 _loan.value = converter.convertToLoanPresentation(deferredLoan.await())
-
                 _loanRegistrationState.value = LoanRegistrationFragmentState.LOADED
             } else {
+                for (inputDataError in inputDataErrors) {
+                    _editTextError.value = inputDataError
+                }
                 _loanRegistrationState.value = LoanRegistrationFragmentState.INCORRECT_INPUT_DATA
             }
         }
     }
 
-    fun checkAmountIsValid(amount: String?) {
-        when (amount) {
-            null -> _editTextError.value = EditTextError.AMOUNT_EMPTY
-            "" -> _editTextError.value = EditTextError.AMOUNT_EMPTY
-            else -> {
-                if (amount.toFloat() > loanConditions.value!!.maxAmount) {
-                    _editTextError.value = EditTextError.EXCEED_MAX_AMOUNT
-                }
+    fun checkInputData(inputData: LoanRegistrationInputData) {
+        viewModelScope.launch(exceptionHandlerPostRequest) {
+            val inputDataErrors =
+                getLoanRegistrationInputDataErrorsUsecase(inputData, loanConditions.value!!)
+            for (inputDataError in inputDataErrors) {
+                _editTextError.value = inputDataError
             }
         }
     }
 
-    private suspend fun inputDataIsValid(inputData: Map<String, String?>): Boolean =
-        withContext(dispatchersDefault) {
-            inputData.values.map {
-                if (it.isNullOrBlank()) {
-                    return@withContext false
-                }
-            }
-            if (inputData["amount"]!!.toLong() > loanConditions.value!!.maxAmount) return@withContext false
-            true
-        }
-
-    private fun createLoanRequest(inputData: Map<String, String?>) =
-        LoanRequest(
-            amount = inputData["amount"]!!.toLong(),
-            firstName = inputData["firstName"]!!,
-            lastName = inputData["lastName"]!!,
-            phoneNumber = inputData["phoneNumber"]!!,
-            percent = loanConditions.value!!.percent,
-            period = loanConditions.value!!.period
-        )
-}
-
-enum class EditTextError {
-    FIRST_NAME_EMPTY, LAST_NAME_EMPTY, NUMBER_EMPTY, AMOUNT_EMPTY, EXCEED_MAX_AMOUNT
 }

@@ -55,8 +55,10 @@ class UserAuthorizationFragmentViewModel
 
     fun register(auth: Auth) {
         viewModelScope.launch(registerExceptionHandler) {
+            _state.value = LOADING
             val deferredRegister = async { registrationUsecase(auth) }
             _user.value = deferredRegister.await()
+            _state.value = DEFAULT
         }
     }
 

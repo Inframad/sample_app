@@ -52,4 +52,5 @@
     <string name="borrower_name">%1$s %2$s</string>
     <string name="loan_date">%1$s %2$s</string>
     <string name="arrange">Оформить</string>
+    <string name="unknown_error_msg">Что-то пошло не так. Повторите позднее</string>
 </resources>

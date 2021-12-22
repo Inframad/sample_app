@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             if (!isAuthorized) {
                 Navigation.findNavController(binding.myNavHostFragment).apply {
                     popBackStack()
-                    navigate(R.id.registration_dest)
+                    navigate(R.id.to_registration)
                 }
             }
         })

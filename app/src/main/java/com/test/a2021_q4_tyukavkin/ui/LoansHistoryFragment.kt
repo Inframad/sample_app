@@ -2,7 +2,6 @@ package com.test.a2021_q4_tyukavkin.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +47,6 @@ class LoansHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.i("MyTAG", "LoansHistoryFragment onViewCreated")
 
         val loanAdapter = LoanListAdapter { id ->
             val bundle = Bundle()
@@ -97,6 +94,10 @@ class LoansHistoryFragment : Fragment() {
                         binding.swiperefresh.isRefreshing = false
 
                     }
+                    FragmentState.UNKNOWN_ERROR -> showError(
+                        getString(R.string.unknown_error_msg),
+                        getString(R.string.ok)
+                    ) {}
                     else -> {
                     }
                 }
@@ -109,7 +110,6 @@ class LoansHistoryFragment : Fragment() {
             }
 
             isLoansEmpty.observe(viewLifecycleOwner, {
-                Log.i("isLoansEmptyFragment", it.toString())
                 if (it) findNavController().navigate(R.id.action_loans_history_dest_to_welcomeFragment)
             })
         }

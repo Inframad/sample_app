@@ -15,7 +15,8 @@ enum class LoanRegistrationFragmentState {
     },
     INCORRECT_INPUT_DATA,
     UNKNOWN_HOST,
-    TIMEOUT;
+    TIMEOUT,
+    UNKNOWN_ERROR;
 
     open val uiVisibility: Int = View.INVISIBLE
     open val progressVisibility: Int = View.VISIBLE
