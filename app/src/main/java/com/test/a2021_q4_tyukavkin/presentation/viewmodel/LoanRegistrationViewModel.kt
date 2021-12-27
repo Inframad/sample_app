@@ -11,12 +11,12 @@ import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.usecase.CreateLoanUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanConditionsUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanRegistrationInputDataErrorsUsecase
-import com.test.a2021_q4_tyukavkin.presentation.SingleLiveEvent
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
 import com.test.a2021_q4_tyukavkin.presentation.model.EditTextError
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
+import com.test.a2021_q4_tyukavkin.presentation.util.SingleLiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

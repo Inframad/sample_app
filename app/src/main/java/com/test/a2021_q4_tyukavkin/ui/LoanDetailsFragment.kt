@@ -38,7 +38,15 @@ class LoanDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoanDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentLoanDetailsBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+            .apply {
+                lifecycleOwner = this@LoanDetailsFragment.viewLifecycleOwner
+                viewmodel = viewModel
+            }
         return binding.root
     }
 
@@ -48,19 +56,6 @@ class LoanDetailsFragment : Fragment() {
         viewModel.apply {
 
             arguments?.let { viewModel.getLoanData(it.getLong("ID")) }
-
-            loanPresentation.observe(viewLifecycleOwner, { loan ->
-                binding.apply {
-                    loanRequestNumber.text = getString(R.string.request_number, loan.id.toString())
-                    loanRequestStatus.text = getString(R.string.loan_request_status, loan.state)
-                    borrowerName.text = getString(R.string.borrower_name, loan.firstName, loan.lastName)
-                    borrowerPhoneNumber.text = getString(R.string.borrower_phone_number, loan.phoneNumber)
-                    loanAmount.text = getString(R.string.loan_amount, loan.amount.toString())
-                    loanPercent.text = loan.percent
-                    loanPeriod.text = getString(R.string.loan_period, loan.period.toString())
-                    loanDate.text = getString(R.string.loan_date, loan.date, loan.time)
-                }
-            })
 
             state.observe(viewLifecycleOwner, { state ->
                 when (state) {

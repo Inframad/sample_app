@@ -3,7 +3,6 @@ package com.test.a2021_q4_tyukavkin.presentation.converter
 import android.content.Context
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.domain.entity.Loan
-import com.test.a2021_q4_tyukavkin.domain.entity.LoanState
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -26,11 +25,7 @@ class Converter @Inject constructor(
             percent = context.getString(R.string.percent_tv, loan.percent.toString()),
             period = loan.period,
             phoneNumber = loan.phoneNumber,
-            state = when (loan.state) {
-                LoanState.APPROVED -> context.getString(R.string.approved)
-                LoanState.REGISTERED -> context.getString(R.string.registered)
-                LoanState.REJECTED -> context.getString(R.string.rejected)
-            }
+            state = loan.state
         )
     }
 

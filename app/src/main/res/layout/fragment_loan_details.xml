@@ -1,148 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/loan_card_detail"
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanDetailsFragmentViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="32dp"
-        android:elevation="16dp"
-        android:theme="@style/CardTextViewStyle"
-        app:cardBackgroundColor="@color/secondaryLightColor"
-        app:cardCornerRadius="8dp">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/loan_card_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
+            android:layout_gravity="center"
+            android:layout_margin="32dp"
+            android:elevation="16dp"
+            android:theme="@style/CardTextViewStyle"
+            app:cardBackgroundColor="@color/secondaryLightColor"
+            app:cardCornerRadius="8dp">
 
-            <TextView
-                android:id="@+id/loan_request_number"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/request_number"
-                app:layout_constraintEnd_toStartOf="@id/loan_request_status"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_margin="8dp">
 
-            <TextView
-                android:id="@+id/loan_request_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/loan_request_status"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/loan_request_number"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/loan_request_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{@string/request_number(Long.toString(viewmodel.loanPresentation.id))}"
+                    app:layout_constraintEnd_toStartOf="@id/loan_request_status"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/borrower"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loan_request_number" />
+                <TextView
+                    android:id="@+id/loan_request_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/loan_request_number"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:loanStatusColor="@{viewmodel.loanPresentation.state}"
+                    app:loanStatusText="@{viewmodel.loanPresentation.state}" />
 
-            <TextView
-                android:id="@+id/borrower_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/borrower_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower"
-                tools:text="@tools:sample/full_names" />
+                <TextView
+                    android:id="@+id/borrower_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{@string/borrower_name(viewmodel.loanPresentation.firstName,viewmodel.loanPresentation.lastName)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loan_request_number"
+                    tools:text="@tools:sample/full_names" />
 
-            <TextView
-                android:id="@+id/borrower_phone_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/borrower_phone_number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower_name" />
+                <TextView
+                    android:id="@+id/borrower_phone_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{@string/borrower_phone_number(viewmodel.loanPresentation.phoneNumber)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/borrower_name" />
 
-            <TextView
-                android:id="@+id/loan_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/loan_amount"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/borrower_phone_number" />
+                <TextView
+                    android:id="@+id/loan_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{@string/loan_amount(viewmodel.loanPresentation.amount)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/borrower_phone_number" />
 
-            <TextView
-                android:id="@+id/loan_percent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/interest_rate"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/loan_amount"
-                app:layout_constraintTop_toBottomOf="@id/borrower_phone_number" />
+                <TextView
+                    android:id="@+id/loan_percent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@{@string/interest_rate(viewmodel.loanPresentation.percent)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/loan_amount"
+                    app:layout_constraintTop_toBottomOf="@id/borrower_phone_number" />
 
-            <TextView
-                android:id="@+id/loan_period"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/loan_period"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loan_amount" />
+                <TextView
+                    android:id="@+id/loan_period"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{@string/loan_period(viewmodel.loanPresentation.period)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loan_amount" />
 
-            <TextView
-                android:id="@+id/loan_request_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/loan_request_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loan_period" />
+                <TextView
+                    android:id="@+id/loan_request_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/loan_request_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loan_period" />
 
-            <TextView
-                android:id="@+id/loan_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/loan_date"
-                tools:text="@tools:sample/date/ddmmyy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loan_request_date" />
+                <TextView
+                    android:id="@+id/loan_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@{@string/loan_date(viewmodel.loanPresentation.time,viewmodel.loanPresentation.date)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loan_request_date"
+                    tools:text="@tools:sample/date/ddmmyy" />
 
-            <TextView
-                android:id="@+id/approved_instructions_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/loan_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textAlignment="center"
-                android:visibility="gone"
-                android:text="@string/loan_approved_instructions"/>
+                <TextView
+                    android:id="@+id/approved_instructions_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loan_approved_instructions"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loan_date" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    </FrameLayout>
+</layout>

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.usecase.CheckAuthorizationUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.LogoutUsecase
-import com.test.a2021_q4_tyukavkin.presentation.SingleLiveEvent
+import com.test.a2021_q4_tyukavkin.presentation.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

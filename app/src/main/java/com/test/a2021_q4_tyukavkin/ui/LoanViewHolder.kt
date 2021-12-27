@@ -9,14 +9,7 @@ class LoanViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(loan: LoanPresentaion, onClickItem: (Long) -> Unit) {
-
-        binding.apply {
-            amountTv.text = loan.amount.toString()
-            percentTv.text = loan.percent
-            statusTv.text = loan.state
-            dateTv.text = loan.date
-            timeTv.text = loan.time
-        }
+        binding.loanPresentation = loan
 
         binding.root.setOnClickListener { onClickItem(loan.id) }
     }
