@@ -49,6 +49,13 @@ enum class UserAuthorizationFragmentState {
         override val progressVisibility: Int
             get() = View.INVISIBLE
     },
+    BAD_RESPONSE {
+        override val buttonsIsEnabled: Boolean
+            get() = true
+        override val progressVisibility: Int
+            get() = View.INVISIBLE
+
+    },
     UNKNOWN_ERROR {
         override val buttonsIsEnabled: Boolean
             get() = true

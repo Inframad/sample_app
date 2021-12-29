@@ -5,7 +5,7 @@ import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.repository.Repository
 import javax.inject.Inject
 
-class RegistrationUsecase @Inject constructor(private val repository: Repository) { //TODO Naming
+class RegistrationUsecase @Inject constructor(private val repository: Repository) {
 
     suspend operator fun invoke(auth: Auth): User =
         repository.register(auth)

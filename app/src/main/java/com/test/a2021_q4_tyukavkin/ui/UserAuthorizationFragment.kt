@@ -111,6 +111,7 @@ class UserAuthorizationFragment : Fragment() {
                     INVALID_CREDENTIALS -> setWarningMessage(getString(R.string.invalid_credentials_msg))
                     TIMEOUT_EXCEPTION -> setWarningMessage(getString(R.string.timeout_exception_msg))
                     BUSY_LOGIN -> setWarningMessage(getString(R.string.busy_login_msg))
+                    BAD_RESPONSE -> setWarningMessage(getString(R.string.server_unavailable))
                     DEFAULT -> updateUI(state)
                     LOADING -> updateUI(state)
                     else -> setWarningMessage(getString(R.string.unknown_error_msg))

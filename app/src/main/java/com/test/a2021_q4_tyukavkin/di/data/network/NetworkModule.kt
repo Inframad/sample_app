@@ -13,10 +13,6 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
-    companion object {
-        const val BASE_URL = "https://focusstart.appspot.com/"
-    }
-
     @Provides
     @Singleton
     fun provideClient(): OkHttpClient =
@@ -40,7 +36,8 @@ class NetworkModule {
     fun provideRetrofit(
         moshiConverterFactory: MoshiConverterFactory,
         scalarsConverterFactory: ScalarsConverterFactory,
-        client: OkHttpClient
+        client: OkHttpClient,
+        @BaseUrl BASE_URL: String
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)

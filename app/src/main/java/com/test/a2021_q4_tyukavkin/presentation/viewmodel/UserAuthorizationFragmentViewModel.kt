@@ -37,6 +37,7 @@ class UserAuthorizationFragmentViewModel
     private val loginExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _state.value = when (throwable) {
             is IllegalAccessException -> INVALID_CREDENTIALS
+            is IllegalAccessError -> BAD_RESPONSE
             is UnknownHostException -> NO_INTERNET_CONNECTION
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
             else -> UNKNOWN_ERROR
@@ -47,6 +48,7 @@ class UserAuthorizationFragmentViewModel
     private val registerExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _state.value = when (throwable) {
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
+            is IllegalAccessError -> BAD_RESPONSE
             is UnknownHostException -> NO_INTERNET_CONNECTION
             is IllegalArgumentException -> BUSY_LOGIN
             else -> UNKNOWN_ERROR

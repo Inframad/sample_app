@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.test.a2021_q4_tyukavkin.domain.entity.InputDataError
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanConditions
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRegistrationInputData
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
@@ -12,7 +13,6 @@ import com.test.a2021_q4_tyukavkin.domain.usecase.CreateLoanUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanConditionsUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.GetLoanRegistrationInputDataErrorsUsecase
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
-import com.test.a2021_q4_tyukavkin.presentation.model.EditTextError
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
@@ -43,8 +43,8 @@ class LoanRegistrationViewModel
     private val _loanConditions: MutableLiveData<LoanConditions> = MutableLiveData()
     val loanConditions: LiveData<LoanConditions> = _loanConditions
 
-    private val _editTextError: SingleLiveEvent<EditTextError> = SingleLiveEvent()
-    val editTextError: LiveData<EditTextError> = _editTextError
+    private val _inputDataError: SingleLiveEvent<InputDataError> = SingleLiveEvent()
+    val inputDataError: LiveData<InputDataError> = _inputDataError
 
     private val _loan: MutableLiveData<LoanPresentaion> = MutableLiveData()
     val loan: LiveData<LoanPresentaion> = _loan
@@ -111,7 +111,7 @@ class LoanRegistrationViewModel
                 _loanRegistrationState.value = LoanRegistrationFragmentState.LOADED
             } else {
                 for (inputDataError in inputDataErrors) {
-                    _editTextError.value = inputDataError
+                    _inputDataError.value = inputDataError
                 }
                 _loanRegistrationState.value = LoanRegistrationFragmentState.INCORRECT_INPUT_DATA
             }
@@ -123,7 +123,7 @@ class LoanRegistrationViewModel
             val inputDataErrors =
                 getLoanRegistrationInputDataErrorsUsecase(inputData, loanConditions.value!!)
             for (inputDataError in inputDataErrors) {
-                _editTextError.value = inputDataError
+                _inputDataError.value = inputDataError
             }
         }
     }

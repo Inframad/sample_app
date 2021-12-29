@@ -26,6 +26,7 @@ class FocusStartDatasource
             } catch (httpException: retrofit2.HttpException) {
                 when (httpException.code()) {
                     400 -> throw IllegalArgumentException("Busy login")
+                    500 -> throw IllegalAccessError() //TODO Обертки для ошибок
                     else -> throw UnknownError(httpException.message)
                 }
             }
@@ -38,6 +39,7 @@ class FocusStartDatasource
             } catch (httpException: retrofit2.HttpException) {
                 when (httpException.code()) {
                     404 -> throw IllegalAccessException("Invalid credentials")
+                    500 -> throw IllegalAccessError() //TODO Обертки для ошибок
                     else -> throw UnknownError(httpException.message)
                 }
             }

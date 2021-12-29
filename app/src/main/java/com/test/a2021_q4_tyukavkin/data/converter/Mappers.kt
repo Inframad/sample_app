@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 fun UserDTO.toUser() =
     User(
         name = name,
-        role = when (role) { //TODO Улучшить
+        role = when (role) {
             "ADMIN" -> UserRole.ADMIN
             "USER" -> UserRole.USER
             else -> throw IllegalArgumentException("User's role can't be $role")

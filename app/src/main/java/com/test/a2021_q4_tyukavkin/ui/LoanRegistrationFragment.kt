@@ -14,8 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentLoanRegistrationBinding
+import com.test.a2021_q4_tyukavkin.domain.entity.InputDataError
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRegistrationInputData
-import com.test.a2021_q4_tyukavkin.presentation.model.EditTextError
 import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.LoanRegistrationViewModel
 import javax.inject.Inject
@@ -102,21 +102,21 @@ class LoanRegistrationFragment : Fragment() {
                 }
             })
 
-            editTextError.observe(viewLifecycleOwner, { editTextError ->
+            inputDataError.observe(viewLifecycleOwner, { editTextError ->
                 when (editTextError) {
-                    EditTextError.EXCEED_MAX_AMOUNT ->
+                    InputDataError.EXCEED_MAX_AMOUNT ->
                         binding.amountEt.error =
                             getString(
                                 R.string.max_amount_exceeded_msg,
                                 viewModel.loanConditions.value!!.maxAmount.toString()
                             )
-                    EditTextError.AMOUNT_EMPTY ->
+                    InputDataError.AMOUNT_EMPTY ->
                         binding.amountEt.error = getString(R.string.field_should_be_not_empty)
-                    EditTextError.FIRST_NAME_EMPTY ->
+                    InputDataError.FIRST_NAME_EMPTY ->
                         binding.firstNameEt.error = getString(R.string.field_should_be_not_empty)
-                    EditTextError.LAST_NAME_EMPTY ->
+                    InputDataError.LAST_NAME_EMPTY ->
                         binding.lastNameEt.error = getString(R.string.field_should_be_not_empty)
-                    EditTextError.NUMBER_EMPTY ->
+                    InputDataError.NUMBER_EMPTY ->
                         binding.phoneNumberEt.error = getString(R.string.field_should_be_not_empty)
                     else -> {}
                 }

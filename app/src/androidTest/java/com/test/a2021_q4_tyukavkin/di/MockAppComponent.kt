@@ -2,8 +2,8 @@ package com.test.a2021_q4_tyukavkin.di
 
 import android.content.Context
 import com.test.a2021_q4_tyukavkin.di.data.datasource.DataModule
+import com.test.a2021_q4_tyukavkin.di.data.network.MockUrlModule
 import com.test.a2021_q4_tyukavkin.di.data.network.NetworkModule
-import com.test.a2021_q4_tyukavkin.di.data.network.UrlModule
 import com.test.a2021_q4_tyukavkin.di.domain.DomainModule
 import com.test.a2021_q4_tyukavkin.di.ui.UIModule
 import com.test.a2021_q4_tyukavkin.ui.*
@@ -16,25 +16,25 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         NetworkModule::class,
-        UrlModule::class,
+        MockUrlModule::class,
         DomainModule::class,
         UIModule::class,
         DataModule::class
     ]
 )
-interface AppComponent {
+interface MockAppComponent: AppComponent {
 
     @Singleton
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): AppComponent
+        fun create(@BindsInstance context: Context): MockAppComponent
     }
 
-    fun inject(activity: MainActivity)
-    fun inject(fragment: UserAuthorizationFragment)
-    fun inject(fragment: LoanDetailsFragment)
-    fun inject(fragment: LoanSuccessfullyCreatedFragment)
-    fun inject(fragment: LoanConditionsFragment)
-    fun inject(fragment: LoanRegistrationFragment)
-    fun inject(fragment: LoansHistoryFragment)
+    override fun inject(activity: MainActivity)
+    override fun inject(fragment: UserAuthorizationFragment)
+    override fun inject(fragment: LoanDetailsFragment)
+    override fun inject(fragment: LoanSuccessfullyCreatedFragment)
+    override fun inject(fragment: LoanConditionsFragment)
+    override fun inject(fragment: LoanRegistrationFragment)
+    override fun inject(fragment: LoansHistoryFragment)
 }
