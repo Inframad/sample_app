@@ -5,9 +5,12 @@ import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.data.model.UserDTO
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
-interface FocusStartLoanApi { //TODO Naming
+interface ServerApi {
 
     @POST("registration")
     suspend fun register(@Body auth: Auth): UserDTO
@@ -17,19 +20,17 @@ interface FocusStartLoanApi { //TODO Naming
 
     @POST("loans")
     suspend fun createLoan(
-        @Header("Authorization") token: String,
         @Body loanRequest: LoanRequest
     ): LoanDTO
 
     @GET("loans/conditions")
-    suspend fun getLoanConditions(@Header("Authorization") token: String): LoanConditionsDTO
+    suspend fun getLoanConditions(): LoanConditionsDTO
 
     @GET("loans/all")
-    suspend fun getAllLoans(@Header("Authorization") token: String): List<LoanDTO>
+    suspend fun getAllLoans(): List<LoanDTO>
 
     @GET("loans/{id}")
     suspend fun getLoanData(
-        @Header("Authorization") token: String,
         @Path("id") id: Long
     ): LoanDTO
 }

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-    suspend fun checkAuthorization(): Boolean
+    fun checkAuthorization(): Boolean
     suspend fun register(auth: Auth): User
     suspend fun login(auth: Auth)
     suspend fun logout()

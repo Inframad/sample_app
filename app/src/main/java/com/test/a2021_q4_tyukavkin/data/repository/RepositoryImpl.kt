@@ -3,7 +3,7 @@ package com.test.a2021_q4_tyukavkin.data.repository
 import com.test.a2021_q4_tyukavkin.data.converter.toLoan
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
-import com.test.a2021_q4_tyukavkin.data.datasource.remote.FocusStartDatasource
+import com.test.a2021_q4_tyukavkin.data.datasource.remote.RemoteDatasource
 import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import com.test.a2021_q4_tyukavkin.domain.entity.*
 import com.test.a2021_q4_tyukavkin.domain.repository.Repository
@@ -16,24 +16,21 @@ import javax.inject.Inject
 
 class RepositoryImpl
 @Inject constructor(
-    private val focusStartDatasource: FocusStartDatasource,
+    private val remoteDatasource: RemoteDatasource,
     private val localDatasource: LocalDatasource,
     @DispatchersIO private val dispatchersIO: CoroutineDispatcher
 ) :
     Repository {
 
-    private val token: String?
-        get() = localDatasource.getToken()
-
-    override suspend fun checkAuthorization(): Boolean =
-        !token.isNullOrBlank()
+    override fun checkAuthorization(): Boolean =
+        !localDatasource.getToken().isNullOrBlank()
 
     override suspend fun register(auth: Auth): User =
-        focusStartDatasource.register(auth).toUser()
+        remoteDatasource.register(auth).toUser()
 
     override suspend fun login(auth: Auth) {
         withContext(dispatchersIO) {
-            val deferredToken = async { focusStartDatasource.login(auth) }
+            val deferredToken = async { remoteDatasource.login(auth) }
             deferredToken.await().apply {
                 localDatasource.saveToken(this)
             }
@@ -46,10 +43,10 @@ class RepositoryImpl
     }
 
     override suspend fun createLoan(loanRequest: LoanRequest): Loan =
-        focusStartDatasource.createLoan(loanRequest, token!!).toLoan()
+        remoteDatasource.createLoan(loanRequest).toLoan()
 
     override suspend fun getLoanData(id: Long): Loan =
-        focusStartDatasource.getLoanData(id, token!!).toLoan()
+        remoteDatasource.getLoanData(id).toLoan()
 
     override fun getAllLoans(): Flow<List<Loan>> =
         localDatasource.getAllLoans().map {
@@ -57,11 +54,11 @@ class RepositoryImpl
         }
 
     override suspend fun updateLoansList(): Boolean {
-        val loans = focusStartDatasource.getAllLoans(token!!)
+        val loans = remoteDatasource.getAllLoans()
         localDatasource.insertLoans(loans)
         return loans.isEmpty()
     }
 
     override suspend fun getLoanConditions(): LoanConditions =
-        focusStartDatasource.getLoanConditions(token!!)
+        remoteDatasource.getLoanConditions()
 }

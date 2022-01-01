@@ -1,6 +1,7 @@
 package com.test.a2021_q4_tyukavkin.di.data.network
 
-import com.test.a2021_q4_tyukavkin.data.network.FocusStartLoanApi
+import com.test.a2021_q4_tyukavkin.data.network.AuthInterceptor
+import com.test.a2021_q4_tyukavkin.data.network.ServerApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -15,8 +16,9 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideClient(): OkHttpClient =
+    fun provideClient(interceptor: AuthInterceptor): OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(interceptor)
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .build()
@@ -50,6 +52,6 @@ class NetworkModule {
     @Singleton
     fun provideFocusStartLoanApi(
         retrofit: Retrofit,
-    ): FocusStartLoanApi =
-        retrofit.create(FocusStartLoanApi::class.java)
+    ): ServerApi =
+        retrofit.create(ServerApi::class.java)
 }
