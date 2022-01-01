@@ -1,0 +1,35 @@
+[
+  {
+    "amount": 5000,
+    "date": "2021-12-29T20:01:12.288Z",
+    "firstName": "Alex",
+    "id": 0,
+    "lastName": "Smith",
+    "percent": 2,
+    "period": 5,
+    "phoneNumber": "123456789",
+    "state": "APPROVED"
+  },
+  {
+    "amount": 10000,
+    "date": "2021-12-30T20:01:12.288Z",
+    "firstName": "John",
+    "id": 1,
+    "lastName": "Miller",
+    "percent": 10.4,
+    "period": 10,
+    "phoneNumber": "string",
+    "state": "REJECTED"
+  },
+  {
+    "amount": 15000,
+    "date": "2021-12-30T20:01:12.288Z",
+    "firstName": "Robert",
+    "id": 2,
+    "lastName": "Walker",
+    "percent": 15.9,
+    "period": 35,
+    "phoneNumber": "123456789",
+    "state": "REGISTERED"
+  }
+]

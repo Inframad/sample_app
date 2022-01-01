@@ -25,10 +25,7 @@ fun loanStatusText(view: TextView, status: LoanState?) {
 }
 
 private fun getLoanStatusColor(status: LoanState?, context: Context): Int {
-    val neutralColor = context.theme.obtainStyledAttributes(
-        intArrayOf(android.R.attr.textColorSecondary)
-    ).getColor(0, 0x000000)
-
+    val neutralColor = ContextCompat.getColor(context, R.color.neutral)
     return when (status) {
         LoanState.APPROVED -> ContextCompat.getColor(context, R.color.positive)
         LoanState.REGISTERED -> neutralColor

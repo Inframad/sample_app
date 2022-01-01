@@ -1,5 +1,6 @@
 package com.test.a2021_q4_tyukavkin
 
+import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.test.a2021_q4_tyukavkin.screen.AuthorizationScreen
@@ -25,6 +26,7 @@ class AuthorizationScreenInstrumentedTest {
     @Before
     fun setup() {
         mockWebServer.start(8080)
+        enterCredentials()
     }
 
     @After
@@ -62,13 +64,6 @@ class AuthorizationScreenInstrumentedTest {
     fun checkLoginErrors() {
         run {
             AuthorizationScreen {
-                loginEt {
-                    typeText("TestUser")
-                }
-                passwordEt {
-                    typeText("pass123")
-                }
-
                 mockWebServer.enqueue(MockResponse().setResponseCode(404))
                 loginBtn {
                     click()
@@ -101,13 +96,6 @@ class AuthorizationScreenInstrumentedTest {
     fun checkRegistrationErrors() {
         run {
             AuthorizationScreen {
-                loginEt {
-                    typeText("TestUser")
-                }
-                passwordEt {
-                    typeText("pass123")
-                }
-
                 mockWebServer.enqueue(MockResponse().setResponseCode(400))
                 registerBtn {
                     click()
@@ -141,13 +129,6 @@ class AuthorizationScreenInstrumentedTest {
     fun checkSuccessfulRegistration() {
         run {
             AuthorizationScreen {
-                loginEt {
-                    typeText("TestUser")
-                }
-                passwordEt {
-                    typeText("pass123")
-                }
-
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
@@ -162,6 +143,17 @@ class AuthorizationScreenInstrumentedTest {
             }
         }
 
+    }
+
+    private fun enterCredentials() {
+        AuthorizationScreen.loginEt {
+            typeText("TestUser")
+        }
+        Espresso.closeSoftKeyboard()
+        AuthorizationScreen.passwordEt {
+            typeText("pass123")
+        }
+        Espresso.closeSoftKeyboard()
     }
 
 }
