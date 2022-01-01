@@ -1,9 +1,13 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.local
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,24 +19,36 @@ class LocalDatasource
 ) {
 
     companion object {
-        private const val DATA = "DATA"
+        private const val TOKEN_KEY = "TOKEN_KEY"
     }
 
-    private val sharedPref = context.getSharedPreferences(DATA, Context.MODE_PRIVATE)
+    private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    private val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
 
-    fun saveString(key: String, value: String?) {
-        with(sharedPref.edit()) {
-            putString(key, value)
-            apply()
+    private val sharedPrefsFile: String = "TOKEN"
+    private val sharedPref: SharedPreferences = EncryptedSharedPreferences.create(
+        sharedPrefsFile,
+        mainKeyAlias,
+        context,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    suspend fun saveToken(value: String?) {
+        withContext(Dispatchers.IO) {
+            with(sharedPref.edit()) {
+                putString(TOKEN_KEY, value)
+                apply()
+            }
         }
     }
 
-    fun getString(key: String): String? =
-        sharedPref.getString(key, null)
+    fun getToken(): String? =
+        sharedPref.getString(TOKEN_KEY, null)
 
-    fun deleteString(key: String) {
+    fun deleteToken() {
         with(sharedPref.edit()) {
-            putString(key, null)
+            putString(TOKEN_KEY, null)
             apply()
         }
     }

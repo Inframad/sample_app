@@ -22,7 +22,8 @@ class RepositoryImpl
 ) :
     Repository {
 
-    private var token = localDatasource.getString("TOKEN")
+    private val token: String?
+        get() = localDatasource.getToken()
 
     override suspend fun checkAuthorization(): Boolean =
         !token.isNullOrBlank()
@@ -34,16 +35,14 @@ class RepositoryImpl
         withContext(dispatchersIO) {
             val deferredToken = async { focusStartDatasource.login(auth) }
             deferredToken.await().apply {
-                token = this
-                localDatasource.saveString("TOKEN", this) //TODO Небезопасно, использовать Android Keystore
+                localDatasource.saveToken(this)
             }
         }
     }
 
     override suspend fun logout() {
-        token = null
         localDatasource.deleteAllLoans()
-        localDatasource.deleteString("TOKEN")
+        localDatasource.deleteToken()
     }
 
     override suspend fun createLoan(loanRequest: LoanRequest): Loan =
