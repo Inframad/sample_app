@@ -1,12 +1,12 @@
-package com.test.a2021_q4_tyukavkin
+package com.test.a2021_q4_tyukavkin.ui
 
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.screen.AuthorizationScreen
 import com.test.a2021_q4_tyukavkin.screen.LoansHistoryScreen
 import com.test.a2021_q4_tyukavkin.tools.TestCase
-import com.test.a2021_q4_tyukavkin.ui.MainActivity
 import com.test.a2021_q4_tyukavkin.util.readStringFromFile
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

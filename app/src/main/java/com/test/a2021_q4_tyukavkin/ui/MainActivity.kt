@@ -39,6 +39,11 @@ class MainActivity : AppCompatActivity() {
                     popBackStack()
                     navigate(R.id.to_registration)
                 }
+            } else {
+                Navigation.findNavController(binding.myNavHostFragment).apply {
+                    popBackStack()
+                    navigate(R.id.loans_history_dest)
+                }
             }
         })
     }

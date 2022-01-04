@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loans_history_dest">
+    app:startDestination="@id/loadingFragment">
 
     <fragment
         android:id="@+id/loans_history_dest"
@@ -93,5 +93,9 @@
         app:exitAnim="@anim/slide_out_right"
         app:popEnterAnim="@anim/slide_in_right"
         app:popExitAnim="@anim/slide_out_left" />
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.test.a2021_q4_tyukavkin.ui.LoadingFragment"
+        android:label="LoadingFragment" />
 
 </navigation>
