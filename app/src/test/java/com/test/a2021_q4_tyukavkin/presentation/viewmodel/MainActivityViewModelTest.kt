@@ -23,7 +23,6 @@ class MainActivityViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var coroutinesTestRule = CoroutinesTestRule()
 
@@ -43,7 +42,7 @@ class MainActivityViewModelTest {
     @Test
     fun `WHEN init EXPECT isAuthorized == true`() {
         runTest {
-            Mockito.`when`(repository.checkAuthorization()).thenReturn(true)
+            Mockito.`when`(checkAuthorizationUsecase()).thenReturn(true)
             val viewModel = MainActivityViewModel(
                 checkAuthorizationUsecase,
                 logoutUsecase

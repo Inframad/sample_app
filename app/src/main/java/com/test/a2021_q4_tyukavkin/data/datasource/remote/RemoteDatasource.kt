@@ -1,12 +1,12 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.remote
 
-import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.data.model.UserDTO
 import com.test.a2021_q4_tyukavkin.data.network.ServerApi
 import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
+import com.test.a2021_q4_tyukavkin.domain.entity.RequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -25,8 +25,8 @@ class RemoteDatasource
                 serverApi.register(auth)
             } catch (httpException: retrofit2.HttpException) {
                 when (httpException.code()) {
-                    400 -> throw IllegalArgumentException("Busy login")
-                    500 -> throw IllegalAccessError() //TODO Обертки для ошибок
+                    400 -> throw RequestError(400)
+                    500 -> throw RequestError(500)
                     else -> throw UnknownError(httpException.message)
                 }
             }
@@ -38,8 +38,8 @@ class RemoteDatasource
                 serverApi.login(auth)
             } catch (httpException: retrofit2.HttpException) {
                 when (httpException.code()) {
-                    404 -> throw IllegalAccessException("Invalid credentials")
-                    500 -> throw IllegalAccessError() //TODO Обертки для ошибок
+                    404 -> throw RequestError(404)
+                    500 -> throw RequestError(500)
                     else -> throw UnknownError(httpException.message)
                 }
             }
@@ -48,7 +48,7 @@ class RemoteDatasource
 
     suspend fun getLoanConditions() =
         withContext(dispatchersIO) {
-            serverApi.getLoanConditions().toLoanConditions() //TODO
+            serverApi.getLoanConditions()
         }
 
     suspend fun createLoan(loanRequest: LoanRequest): LoanDTO =

@@ -1,11 +1,11 @@
 package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
+import com.test.a2021_q4_tyukavkin.domain.entity.RequestError
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
@@ -36,21 +36,30 @@ class UserAuthorizationFragmentViewModel
 
     private val loginExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _state.value = when (throwable) {
-            is IllegalAccessException -> INVALID_CREDENTIALS
-            is IllegalAccessError -> BAD_RESPONSE
+            is RequestError -> {
+                when (throwable.code) {
+                    404 -> INVALID_CREDENTIALS
+                    500 -> SERVER_ERROR
+                    else -> UNKNOWN_ERROR
+                }
+            }
             is UnknownHostException -> NO_INTERNET_CONNECTION
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
             else -> UNKNOWN_ERROR
         }
-        Log.e("MyTAG", "ERROR", throwable)
     }
 
     private val registerExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _state.value = when (throwable) {
+            is RequestError -> {
+                when (throwable.code) {
+                    400 -> BUSY_LOGIN
+                    500 -> SERVER_ERROR
+                    else -> UNKNOWN_ERROR
+                }
+            }
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
-            is IllegalAccessError -> BAD_RESPONSE
             is UnknownHostException -> NO_INTERNET_CONNECTION
-            is IllegalArgumentException -> BUSY_LOGIN
             else -> UNKNOWN_ERROR
         }
     }

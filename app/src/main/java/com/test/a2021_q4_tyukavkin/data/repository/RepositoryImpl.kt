@@ -1,6 +1,7 @@
 package com.test.a2021_q4_tyukavkin.data.repository
 
 import com.test.a2021_q4_tyukavkin.data.converter.toLoan
+import com.test.a2021_q4_tyukavkin.data.converter.toLoanConditions
 import com.test.a2021_q4_tyukavkin.data.converter.toUser
 import com.test.a2021_q4_tyukavkin.data.datasource.local.LocalDatasource
 import com.test.a2021_q4_tyukavkin.data.datasource.remote.RemoteDatasource
@@ -60,5 +61,5 @@ class RepositoryImpl
     }
 
     override suspend fun getLoanConditions(): LoanConditions =
-        remoteDatasource.getLoanConditions()
+        remoteDatasource.getLoanConditions().toLoanConditions()
 }
