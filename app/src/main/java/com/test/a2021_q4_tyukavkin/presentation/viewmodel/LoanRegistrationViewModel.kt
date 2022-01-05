@@ -61,18 +61,17 @@ class LoanRegistrationViewModel
     }
 
     private val exceptionHandlerPostRequest = CoroutineExceptionHandler { _, throwable ->
-        when (throwable) {
-            is UnknownHostException -> _loanRegistrationState.value =
+        _loanRegistrationState.value = when (throwable) {
+            is UnknownHostException ->
                 LoanRegistrationFragmentState.UNKNOWN_HOST
-            is SocketTimeoutException -> _loanRegistrationState.value =
+            is SocketTimeoutException ->
                 LoanRegistrationFragmentState.TIMEOUT
-            is NumberFormatException -> _loanRegistrationState.value =
+            is NumberFormatException ->
                 LoanRegistrationFragmentState.INCORRECT_INPUT_DATA
-            else -> {
+            else ->
                 LoanRegistrationFragmentState.UNKNOWN_ERROR
-                Log.e("LoanRegistrationVM", "exceptionHandlerPostRequest", throwable)
-            }
         }
+        Log.e("LoanRegistrationVM", "exceptionHandlerPostRequest", throwable)
     }
 
     init {

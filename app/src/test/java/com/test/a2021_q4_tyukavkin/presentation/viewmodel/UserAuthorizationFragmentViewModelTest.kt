@@ -26,10 +26,10 @@ import java.net.UnknownHostException
 class UserAuthorizationFragmentViewModelTest {
 
     @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    var coroutinesTestRule = CoroutinesTestRule()
+    val coroutinesTestRule = CoroutinesTestRule()
 
     private lateinit var registrationUsecase: RegistrationUsecase
     private lateinit var loginUsecase: LoginUsecase
@@ -136,6 +136,15 @@ class UserAuthorizationFragmentViewModelTest {
     }
 
     @Test
+    fun `WHEN login() throw Throwable() EXPECT state == UNKNOWN_ERROR`() {
+        runTest {
+            val actual = stateWhenLoginThrowException(Throwable())
+            val expected = UserAuthorizationFragmentState.UNKNOWN_ERROR
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
     fun `WHEN register() throw RequestError(500) EXPECT state == SERVER_ERROR`() {
         runTest {
             val actual = stateWhenRegisterThrowException(RequestError(500))
@@ -167,6 +176,15 @@ class UserAuthorizationFragmentViewModelTest {
         runTest {
             val actual = stateWhenRegisterThrowException(RequestError(400))
             val expected = UserAuthorizationFragmentState.BUSY_LOGIN
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw Throwable() EXPECT state == UNKNOWN_ERROR`() {
+        runTest {
+            val actual = stateWhenRegisterThrowException(Throwable())
+            val expected = UserAuthorizationFragmentState.UNKNOWN_ERROR
             assertThat(actual, `is`(expected))
         }
     }
