@@ -74,7 +74,7 @@ class UserAuthorizationFragment : Fragment() {
             registerBtn.setOnClickListener {
                 viewModel.register(
                     Auth(
-                        name = binding.loginEt.text.toString(),
+                        username = binding.loginEt.text.toString(),
                         password = binding.passwordEt.text.toString()
                     )
                 )
@@ -84,7 +84,7 @@ class UserAuthorizationFragment : Fragment() {
                 Log.i("MyTAG", "Login pressed")
                 viewModel.login(
                     Auth(
-                        name = binding.loginEt.text.toString(),
+                        username = binding.loginEt.text.toString(),
                         password = binding.passwordEt.text.toString()
                     )
                 )

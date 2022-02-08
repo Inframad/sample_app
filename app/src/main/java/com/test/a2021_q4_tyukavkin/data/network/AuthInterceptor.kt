@@ -15,7 +15,7 @@ class AuthInterceptor
         val request: Request = chain.request()
         localDatasource.getToken()?.let {
             val authRequest = request.newBuilder()
-                .header("Authorization", it).build()
+                .header("Authorization", "Token $it").build()
             return chain.proceed(authRequest)
         }
         return chain.proceed(request)

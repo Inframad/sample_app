@@ -9,7 +9,6 @@ import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import com.test.a2021_q4_tyukavkin.domain.entity.*
 import com.test.a2021_q4_tyukavkin.domain.repository.Repository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -31,10 +30,8 @@ class RepositoryImpl
 
     override suspend fun login(auth: Auth) {
         withContext(dispatchersIO) {
-            val deferredToken = async { remoteDatasource.login(auth) }
-            deferredToken.await().apply {
-                localDatasource.saveToken(this)
-            }
+            val token = remoteDatasource.login(auth)
+            localDatasource.saveToken(token.value)
         }
     }
 

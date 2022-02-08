@@ -1,5 +1,6 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.remote
 
+import com.test.a2021_q4_tyukavkin.data.model.AuthToken
 import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.data.model.UserDTO
 import com.test.a2021_q4_tyukavkin.data.network.ServerApi
@@ -32,7 +33,7 @@ class RemoteDatasource
             }
         }
 
-    suspend fun login(auth: Auth): String =
+    suspend fun login(auth: Auth): AuthToken =
         withContext(dispatchersIO) {
             return@withContext try {
                 serverApi.login(auth)

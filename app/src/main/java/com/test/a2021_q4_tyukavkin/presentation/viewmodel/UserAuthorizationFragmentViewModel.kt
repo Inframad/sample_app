@@ -1,5 +1,6 @@
 package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,6 +48,7 @@ class UserAuthorizationFragmentViewModel
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
             else -> UNKNOWN_ERROR
         }
+        Log.e("UserAuthorization", "loginExceptionHandler", throwable)
     }
 
     private val registerExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -62,6 +64,7 @@ class UserAuthorizationFragmentViewModel
             is UnknownHostException -> NO_INTERNET_CONNECTION
             else -> UNKNOWN_ERROR
         }
+        Log.e("LoanRegistrationVM", "registerExceptionHandler", throwable)
     }
 
     fun register(auth: Auth) {

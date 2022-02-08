@@ -58,6 +58,7 @@ class LoanRegistrationViewModel
                 Log.e("LoanRegistrationVM", "exceptionHandlerGetRequest", throwable)
             }
         }
+        Log.e("LoanRegistrationVM", "exceptionHandlerGetRequest", throwable)
     }
 
     private val exceptionHandlerPostRequest = CoroutineExceptionHandler { _, throwable ->
