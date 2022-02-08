@@ -8,6 +8,7 @@ import com.test.a2021_q4_tyukavkin.screen.AuthorizationScreen
 import com.test.a2021_q4_tyukavkin.screen.LoansHistoryScreen
 import com.test.a2021_q4_tyukavkin.tools.TestCase
 import com.test.a2021_q4_tyukavkin.util.readStringFromFile
+import com.test.a2021_q4_tyukavkin.data.model.AuthToken
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -129,7 +130,7 @@ class LoansHistoryScreenTest {
                 }
                 Espresso.closeSoftKeyboard()
 
-                mockWebServer.enqueue(MockResponse().setBody("Test token"))
+                mockWebServer.enqueue(MockResponse().setBody(readStringFromFile("TestToken.json")))
                 enqueueResponse()
                 loginBtn {
                     click()

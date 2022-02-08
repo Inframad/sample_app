@@ -8,7 +8,8 @@
     "percent": 2,
     "period": 5,
     "phoneNumber": "123456789",
-    "state": "APPROVED"
+    "state": "APPROVED",
+    "user": 1
   },
   {
     "amount": 10000,
@@ -19,7 +20,8 @@
     "percent": 10.4,
     "period": 10,
     "phoneNumber": "string",
-    "state": "REJECTED"
+    "state": "REJECTED",
+    "user": 1
   },
   {
     "amount": 15000,
@@ -30,6 +32,7 @@
     "percent": 15.9,
     "period": 35,
     "phoneNumber": "123456789",
-    "state": "REGISTERED"
+    "state": "REGISTERED",
+    "user": 1
   }
 ]

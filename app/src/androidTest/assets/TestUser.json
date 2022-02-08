@@ -1,4 +1,5 @@
 {
-  "name": "TestUser",
-  "role": "USER"
+  "id": 0,
+  "email": "",
+  "username": "TestUser"
 }
