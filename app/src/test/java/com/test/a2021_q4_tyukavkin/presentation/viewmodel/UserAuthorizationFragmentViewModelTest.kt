@@ -35,7 +35,7 @@ class UserAuthorizationFragmentViewModelTest {
     private lateinit var loginUsecase: LoginUsecase
 
     private val testAuth = Auth(
-        name = "TestUser",
+        username = "TestUser",
         password = "pass123"
     )
     private val testUser = User(

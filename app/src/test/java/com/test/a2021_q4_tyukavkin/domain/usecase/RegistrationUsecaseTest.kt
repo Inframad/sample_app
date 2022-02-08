@@ -14,7 +14,7 @@ class RegistrationUsecaseTest {
 
     private val testAuth =
         Auth(
-            name = "User",
+            username = "User",
             password = "qwe123"
         )
 
