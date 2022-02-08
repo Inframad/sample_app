@@ -18,7 +18,6 @@ import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.LoanRegistrationFragmentState
 import com.test.a2021_q4_tyukavkin.presentation.util.SingleLiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -80,10 +79,11 @@ class LoanRegistrationViewModel
     }
 
     fun getLoanConditions() {
-        _conditionsState.value = FragmentState.LOADING
         viewModelScope.launch(exceptionHandlerGetRequest) {
-            val deferredLoanConditions = async { getLoanConditionsUsecase() }
-            _loanConditions.value = deferredLoanConditions.await()
+            _conditionsState.value = FragmentState.LOADING
+
+            _loanConditions.value = getLoanConditionsUsecase()
+
             _conditionsState.value = FragmentState.LOADED
         }
     }
@@ -92,22 +92,22 @@ class LoanRegistrationViewModel
         viewModelScope.launch(exceptionHandlerPostRequest) {
             val inputDataErrors =
                 getLoanRegistrationInputDataErrorsUsecase(inputData, loanConditions.value!!)
+
             if (inputDataErrors.isEmpty()) {
                 _loanRegistrationState.value = LoanRegistrationFragmentState.LOADING
 
-                val deferredLoan = async {
-                    createLoanUsecase(
-                        LoanRequest(
-                            amount = inputData.amount.toString().toLong(),
-                            firstName = inputData.firstName.toString(),
-                            lastName = inputData.lastName.toString(),
-                            percent = loanConditions.value!!.percent,
-                            period = loanConditions.value!!.period,
-                            phoneNumber = inputData.phoneNumber.toString()
-                        )
+                val loan = createLoanUsecase(
+                    LoanRequest(
+                        amount = inputData.amount.toString().toLong(),
+                        firstName = inputData.firstName.toString(),
+                        lastName = inputData.lastName.toString(),
+                        percent = loanConditions.value!!.percent,
+                        period = loanConditions.value!!.period,
+                        phoneNumber = inputData.phoneNumber.toString()
                     )
-                }
-                _loan.value = converter.convertToLoanPresentation(deferredLoan.await())
+                )
+                _loan.value = converter.convertToLoanPresentation(loan)
+
                 _loanRegistrationState.value = LoanRegistrationFragmentState.LOADED
             } else {
                 for (inputDataError in inputDataErrors) {

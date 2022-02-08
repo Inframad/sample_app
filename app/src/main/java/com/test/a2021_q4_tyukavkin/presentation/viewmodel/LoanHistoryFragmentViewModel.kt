@@ -10,7 +10,6 @@ import com.test.a2021_q4_tyukavkin.domain.usecase.UpdateLoansListUsecase
 import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
@@ -46,8 +45,7 @@ class LoanHistoryFragmentViewModel
     fun updateLoans() {
         viewModelScope.launch(exceptionHandler) {
             _state.value = FragmentState.LOADING
-            val deferredUpdate = async { updateLoansListUsecase() }
-            _isLoansEmpty.value = deferredUpdate.await()
+            _isLoansEmpty.value = updateLoansListUsecase()
             _state.value = FragmentState.LOADED
         }
     }

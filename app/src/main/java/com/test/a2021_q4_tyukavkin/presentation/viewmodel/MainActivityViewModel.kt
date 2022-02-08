@@ -1,6 +1,5 @@
 package com.test.a2021_q4_tyukavkin.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +21,6 @@ class MainActivityViewModel
     init {
         viewModelScope.launch {
             _isAuthorized.value = checkAuthorizationUsecase()
-            Log.i("MyTAG", "Auth ${isAuthorized.value}")
         }
     }
 

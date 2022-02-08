@@ -11,7 +11,6 @@ import com.test.a2021_q4_tyukavkin.presentation.converter.Converter
 import com.test.a2021_q4_tyukavkin.presentation.model.LoanPresentaion
 import com.test.a2021_q4_tyukavkin.presentation.state.FragmentState
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -44,13 +43,11 @@ class LoanDetailsFragmentViewModel
     fun getLoanData(id: Long) {
         _state.value = FragmentState.LOADING
         viewModelScope.launch(exceptionHandler) {
-            val loanDeferred = async { getLoanDataUsecase(id) }
-
-            loanDeferred.await().apply {
+            val loan = getLoanDataUsecase(id)
+            loan.apply {
                 if (this.state == LoanState.APPROVED) _isApproved.value = true
                 _loanPresentation.value = converter.convertToLoanPresentation(this)
             }
-
             _state.value = FragmentState.LOADED
         }
     }

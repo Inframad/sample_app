@@ -13,7 +13,6 @@ import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState.*
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -70,8 +69,7 @@ class UserAuthorizationFragmentViewModel
     fun register(auth: Auth) {
         viewModelScope.launch(registerExceptionHandler) {
             _state.value = LOADING
-            val deferredRegister = async { registrationUsecase(auth) }
-            _user.value = deferredRegister.await()
+            _user.value = registrationUsecase(auth)
             _state.value = DEFAULT
         }
     }
@@ -79,8 +77,7 @@ class UserAuthorizationFragmentViewModel
     fun login(auth: Auth) {
         viewModelScope.launch(loginExceptionHandler) {
             _state.value = LOADING
-            val deferredLogging = async { loginUsecase(auth) }
-            deferredLogging.await()
+            loginUsecase(auth)
             _state.value = LOADED
         }
     }
