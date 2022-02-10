@@ -54,4 +54,13 @@
     <string name="loan_date">%1$s %2$s</string>
     <string name="arrange">Arrange</string>
     <string name="unknown_error_msg">Что-то пошло не так. Повторите позднее</string>
+    <string name="server_unavailable">Server is not available</string>
+    <string name="login_empty_msg">A login may not be blank</string>
+    <string name="incorrect_login_msg">Incorrect login</string>
+    <string name="incorreсе_password_msg">Incorrect password</string>
+    <string name="too_short_password_msg">This password is too short. It must contain at least 8 characters</string>
+    <string name="too_common_password_msg">This password is too common</string>
+    <string name="entirely_numeric_password_msg">This password is entirely numeric</string>
+    <string name="empty_password_msg">A password may not be blank</string>
+    <string name="password_too_similar_to_login_msg">The password is too similar to the username</string>
 </resources>

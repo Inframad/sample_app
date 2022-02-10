@@ -1,5 +1,8 @@
 package com.test.a2021_q4_tyukavkin.data.datasource.remote
 
+import com.test.a2021_q4_tyukavkin.data.converter.convertErrorBody
+import com.test.a2021_q4_tyukavkin.data.converter.toAuthErrorResponse
+import com.test.a2021_q4_tyukavkin.data.model.AuthErrorResponseDTO
 import com.test.a2021_q4_tyukavkin.data.model.AuthToken
 import com.test.a2021_q4_tyukavkin.data.model.LoanDTO
 import com.test.a2021_q4_tyukavkin.data.model.UserDTO
@@ -8,8 +11,10 @@ import com.test.a2021_q4_tyukavkin.di.DispatchersIO
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.LoanRequest
 import com.test.a2021_q4_tyukavkin.domain.entity.RequestError
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.AuthException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,9 +29,12 @@ class RemoteDatasource
         withContext(dispatchersIO) {
             return@withContext try {
                 serverApi.register(auth)
-            } catch (httpException: retrofit2.HttpException) {
+            } catch (httpException: HttpException) {
                 when (httpException.code()) {
-                    400 -> throw RequestError(400)
+                    400 -> throw AuthException(
+                        httpException.convertErrorBody(AuthErrorResponseDTO::class.java)
+                            ?.toAuthErrorResponse()
+                    )
                     500 -> throw RequestError(500)
                     else -> throw UnknownError(httpException.message)
                 }
@@ -37,7 +45,7 @@ class RemoteDatasource
         withContext(dispatchersIO) {
             return@withContext try {
                 serverApi.login(auth)
-            } catch (httpException: retrofit2.HttpException) {
+            } catch (httpException: HttpException) {
                 when (httpException.code()) {
                     404 -> throw RequestError(404)
                     500 -> throw RequestError(500)

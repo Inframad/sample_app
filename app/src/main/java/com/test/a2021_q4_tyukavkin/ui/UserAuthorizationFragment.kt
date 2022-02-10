@@ -17,6 +17,8 @@ import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
 import com.test.a2021_q4_tyukavkin.databinding.FragmentRegistrationBinding
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.LoginError
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.PasswordError
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState.*
 import com.test.a2021_q4_tyukavkin.presentation.viewmodel.UserAuthorizationFragmentViewModel
@@ -118,7 +120,66 @@ class UserAuthorizationFragment : Fragment() {
                 }
                 updateUI(state)
             })
+
+            loginError.observe(viewLifecycleOwner) { loginErrors ->
+                showLoginErrors(loginErrors)
+            }
+
+            passwordError.observe(viewLifecycleOwner) { passwordErrors ->
+                showPasswordErrors(passwordErrors)
+            }
         }
+    }
+
+    private fun showPasswordErrors(passwordErrors: List<PasswordError>) {
+        val stringBuilder = StringBuilder()
+
+        val iterator = passwordErrors.iterator()
+        iterator.forEach {
+
+            when (it) {
+                PasswordError.INCORRECT ->
+                    stringBuilder.append(getString(R.string.incorreсе_password_msg))
+                PasswordError.TOO_SHORT ->
+                    stringBuilder.append(getString(R.string.too_short_password_msg))
+                PasswordError.TOO_COMMON ->
+                    stringBuilder.append(getString(R.string.too_common_password_msg))
+                PasswordError.ENTIRELY_NUMERIC ->
+                    stringBuilder.append(getString(R.string.entirely_numeric_password_msg))
+                PasswordError.BLANK_FIELD ->
+                    stringBuilder.append(getString(R.string.empty_password_msg))
+                PasswordError.TOO_SIMILAR_TO_LOGIN ->
+                    stringBuilder.append(getString(R.string.password_too_similar_to_login_msg))
+            }
+
+            if (iterator.hasNext()) {
+                stringBuilder.append(System.getProperty("line.separator"))
+            }
+        }
+
+        binding.passwordEt.error = stringBuilder
+    }
+
+    private fun showLoginErrors(loginErrors: List<LoginError>) {
+        val stringBuilder = StringBuilder()
+        val iterator = loginErrors.iterator()
+
+        iterator.forEach {
+            when (it) {
+                LoginError.BLANK_FIELD ->
+                    stringBuilder.append(getString(R.string.login_empty_msg))
+                LoginError.INCORRECT ->
+                    stringBuilder.append(getString(R.string.incorrect_login_msg))
+                LoginError.BUSY ->
+                    stringBuilder.append(getString(R.string.busy_login_msg))
+            }
+        }
+
+        if (iterator.hasNext()) {
+            stringBuilder.append(System.getProperty("line.separator"))
+        }
+
+        binding.loginEt.error = stringBuilder
     }
 
     override fun onDestroyView() {
@@ -137,7 +198,8 @@ class UserAuthorizationFragment : Fragment() {
     }
 
     private fun setNetworkConnectionListener() {
-        connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityManager?.registerDefaultNetworkCallback(networkCallback)

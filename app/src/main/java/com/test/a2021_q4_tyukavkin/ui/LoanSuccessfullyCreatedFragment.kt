@@ -63,10 +63,11 @@ class LoanSuccessfullyCreatedFragment : Fragment() {
 
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             findNavController().apply {
-                popBackStack()
-                navigate(R.id.loans_history_dest)
+                repeat(3) {
+                    popBackStack()
+                }
             }
         }
     }

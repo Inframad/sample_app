@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.RequestError
 import com.test.a2021_q4_tyukavkin.domain.entity.User
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.AuthException
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.LoginError
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.PasswordError
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
@@ -29,6 +32,12 @@ class UserAuthorizationFragmentViewModel
 
     private val _state: MutableLiveData<UserAuthorizationFragmentState> = MutableLiveData()
     val state: LiveData<UserAuthorizationFragmentState> = _state
+
+    private val _loginError: MutableLiveData<List<LoginError>> = MutableLiveData()
+    val loginError: LiveData<List<LoginError>> = _loginError
+
+    private val _passwordError: MutableLiveData<List<PasswordError>> = MutableLiveData()
+    val passwordError: LiveData<List<PasswordError>> = _passwordError
 
     init {
         _state.value = DEFAULT
@@ -54,16 +63,28 @@ class UserAuthorizationFragmentViewModel
         _state.value = when (throwable) {
             is RequestError -> {
                 when (throwable.code) {
-                    400 -> BUSY_LOGIN
                     500 -> SERVER_ERROR
                     else -> UNKNOWN_ERROR
                 }
             }
             is SocketTimeoutException -> TIMEOUT_EXCEPTION
             is UnknownHostException -> NO_INTERNET_CONNECTION
+            is AuthException -> INVALID_CREDENTIALS
             else -> UNKNOWN_ERROR
         }
         Log.e("LoanRegistrationVM", "registerExceptionHandler", throwable)
+
+        if (throwable is AuthException) {
+            throwable.value?.username?.let {
+                _loginError.value = it
+            }
+
+            throwable.value?.password?.let {
+                _passwordError.value = it
+            }
+
+            Log.e("LoanRegistrationVM", throwable.value.toString())
+        }
     }
 
     fun register(auth: Auth) {

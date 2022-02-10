@@ -54,4 +54,12 @@
     <string name="arrange">Оформить</string>
     <string name="unknown_error_msg">Что-то пошло не так. Повторите позднее</string>
     <string name="server_unavailable">Сервер недоступен</string>
+    <string name="login_empty_msg">Логин не должен быть пустым</string>
+    <string name="incorrect_login_msg">Некорректный логин</string>
+    <string name="incorreсе_password_msg">Некорректный пароль</string>
+    <string name="too_short_password_msg">Пароль должен содержать не менее 8 символов</string>
+    <string name="too_common_password_msg">Слишком простой пароль</string>
+    <string name="entirely_numeric_password_msg">Пароль не может быть полностью из цифр</string>
+    <string name="empty_password_msg">Введите пароль</string>
+    <string name="password_too_similar_to_login_msg">Пароль очень похож на логин</string>
 </resources>
