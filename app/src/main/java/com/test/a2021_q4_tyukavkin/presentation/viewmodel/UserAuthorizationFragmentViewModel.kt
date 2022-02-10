@@ -72,7 +72,6 @@ class UserAuthorizationFragmentViewModel
             is AuthException -> INVALID_CREDENTIALS
             else -> UNKNOWN_ERROR
         }
-        Log.e("LoanRegistrationVM", "registerExceptionHandler", throwable)
 
         if (throwable is AuthException) {
             throwable.value?.username?.let {
@@ -82,9 +81,9 @@ class UserAuthorizationFragmentViewModel
             throwable.value?.password?.let {
                 _passwordError.value = it
             }
-
-            Log.e("LoanRegistrationVM", throwable.value.toString())
         }
+
+        Log.e("LoanRegistrationVM", "registerExceptionHandler", throwable)
     }
 
     fun register(auth: Auth) {

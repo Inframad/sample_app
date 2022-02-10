@@ -126,6 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/loan_approved_instructions"
                     android:textAlignment="center"
+                    android:visibility="gone"
 
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

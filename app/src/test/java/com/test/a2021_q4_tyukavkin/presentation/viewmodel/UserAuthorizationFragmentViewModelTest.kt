@@ -5,6 +5,10 @@ import com.test.a2021_q4_tyukavkin.domain.entity.Auth
 import com.test.a2021_q4_tyukavkin.domain.entity.RequestError
 import com.test.a2021_q4_tyukavkin.domain.entity.User
 import com.test.a2021_q4_tyukavkin.domain.entity.UserRole
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.AuthErrorResponse
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.AuthException
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.LoginError
+import com.test.a2021_q4_tyukavkin.domain.entity.exception.PasswordError
 import com.test.a2021_q4_tyukavkin.domain.usecase.LoginUsecase
 import com.test.a2021_q4_tyukavkin.domain.usecase.RegistrationUsecase
 import com.test.a2021_q4_tyukavkin.presentation.state.UserAuthorizationFragmentState
@@ -172,10 +176,118 @@ class UserAuthorizationFragmentViewModelTest {
     }
 
     @Test
-    fun `WHEN register() throw RequestError(400) EXPECT state == BUSY_LOGIN`() {
+    fun `WHEN register() throw AuthException with busy login EXPECT loginError == BUSY_LOGIN`() {
         runTest {
-            val actual = stateWhenRegisterThrowException(RequestError(400))
-            val expected = UserAuthorizationFragmentState.BUSY_LOGIN
+            val busyLoginError = AuthException(
+                AuthErrorResponse(listOf(LoginError.BUSY),null)
+            )
+
+            val actual = loginErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(LoginError.BUSY)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with blank login EXPECT loginError == BLANK_FIELD`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(listOf(LoginError.BLANK_FIELD),null)
+            )
+
+            val actual = loginErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(LoginError.BLANK_FIELD)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with unknown login mistake EXPECT loginError == INCORRECT`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(listOf(LoginError.INCORRECT),null)
+            )
+
+            val actual = loginErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(LoginError.INCORRECT)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with blank password EXPECT passwordError == BLANK_FIELD`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.BLANK_FIELD))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.BLANK_FIELD)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with entirely numeric password EXPECT passwordError == ENTIRELY_NUMERIC`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.ENTIRELY_NUMERIC))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.ENTIRELY_NUMERIC)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with unknown password mistake EXPECT passwordError == INCORRECT`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.INCORRECT))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.INCORRECT)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with too common password EXPECT passwordError == TOO_COMMON`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.TOO_COMMON))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.TOO_COMMON)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with too short password EXPECT passwordError == TOO_SHORT`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.TOO_SHORT))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.TOO_SHORT)
+            assertThat(actual, `is`(expected))
+        }
+    }
+
+    @Test
+    fun `WHEN register() throw AuthException with too similar to login password EXPECT passwordError == TOO_SIMILAR_TO_LOGIN`() {
+        runTest {
+            val busyLoginError = AuthException(
+                AuthErrorResponse(null, listOf(PasswordError.TOO_SIMILAR_TO_LOGIN))
+            )
+
+            val actual = passwordErrorWhenRegisterThrowException(busyLoginError)
+            val expected = listOf(PasswordError.TOO_SIMILAR_TO_LOGIN)
             assertThat(actual, `is`(expected))
         }
     }
@@ -213,5 +325,31 @@ class UserAuthorizationFragmentViewModelTest {
         coroutinesTestRule.testCoroutineScheduler.runCurrent()
 
         return viewModel.state.getOrAwaitValue()
+    }
+
+    private fun loginErrorWhenRegisterThrowException(exception: Throwable): List<LoginError> {
+        val viewModel = UserAuthorizationFragmentViewModel(
+            registrationUsecase,
+            loginUsecase
+        )
+        coEvery { registrationUsecase(testAuth) } throws exception
+
+        viewModel.register(testAuth)
+        coroutinesTestRule.testCoroutineScheduler.runCurrent()
+
+        return viewModel.loginError.getOrAwaitValue()
+    }
+
+    private fun passwordErrorWhenRegisterThrowException(exception: Throwable): List<PasswordError> {
+        val viewModel = UserAuthorizationFragmentViewModel(
+            registrationUsecase,
+            loginUsecase
+        )
+        coEvery { registrationUsecase(testAuth) } throws exception
+
+        viewModel.register(testAuth)
+        coroutinesTestRule.testCoroutineScheduler.runCurrent()
+
+        return viewModel.passwordError.getOrAwaitValue()
     }
 }
