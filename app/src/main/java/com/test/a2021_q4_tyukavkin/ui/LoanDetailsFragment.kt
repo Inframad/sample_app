@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.test.a2021_q4_tyukavkin.App
 import com.test.a2021_q4_tyukavkin.R
@@ -81,6 +83,13 @@ class LoanDetailsFragment : Fragment() {
                 binding.approvedInstructionsTv.visibility = View.VISIBLE
             })
 
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().apply {
+                popBackStack(R.id.loans_history_dest, true)
+                navigate(R.id.loans_history_dest)
+            }
         }
     }
 
