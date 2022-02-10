@@ -91,14 +91,6 @@ class AuthorizationScreenTest {
     @TestCase("Test-3", "Проверить отображение ошибок при регистрации")
     fun checkRegistrationErrors() {
         AuthorizationScreen {
-            mockWebServer.enqueue(MockResponse().setResponseCode(400))
-            registerBtn {
-                click()
-            }
-            warningTv {
-                hasText(R.string.busy_login_msg)
-            }
-
             mockWebServer.enqueue(MockResponse().setResponseCode(500))
             registerBtn {
                 click()
