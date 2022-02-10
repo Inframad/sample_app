@@ -35,8 +35,8 @@ class LoanRegistrationViewModel
         MutableLiveData()
     val conditionsState: LiveData<FragmentState> = _conditionsState
 
-    private val _loanRegistrationState: MutableLiveData<LoanRegistrationFragmentState> =
-        MutableLiveData()
+    private val _loanRegistrationState: SingleLiveEvent<LoanRegistrationFragmentState> =
+        SingleLiveEvent()
     val loanRegistrationState: LiveData<LoanRegistrationFragmentState> = _loanRegistrationState
 
     private val _loanConditions: MutableLiveData<LoanConditions> = MutableLiveData()
